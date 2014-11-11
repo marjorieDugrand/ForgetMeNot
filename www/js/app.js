@@ -9,7 +9,7 @@ angular.module('forget-me-not', ['ionic'])
             $stateProvider
                     .state('home', {
                         url: '/',
-                        templateUrl: '/pages/home.html'
+                        templateUrl: 'pages/home.html'
                     });
 
             $urlRouterProvider.otherwise('/');
