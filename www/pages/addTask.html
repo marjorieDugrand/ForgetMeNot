@@ -4,70 +4,79 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
-    <head>
-        <title> Add task </title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <html xmlns="http://www.w3.org/1999/xhtml">
-	<div class="header">
-            <div ng-include="'header.html'"/>
-	</div>
-	<div id="task-block" ng-app="task" ng-controller="AddTaskController">
-            <a ng-href="task{{task.id}}" id="save" ng-click="saveTask()">
-		<img ng-src="save.jpg"/>
-            </a>
-            <a ng-href="home-page" ngrid="cancel" ng-click="cancelTask()">
-                <img ng-src="cancel.jpg"/>
-            </a>
+
+<view title="new task">
+    <content>
+	<div id="task-block" ng-app="task">
+            
+            <button id="save" class="button icon ion-archive"
+                    href ng-href="/tasks/{{task.id}}"
+                    ng-click="saveTask()"/>
+            <button id="cancel" class="button icon ion-close-round"
+                    href ng-href="/"
+                    ng-click="cancelTask()"/>
+            
             <div id="task-details">
 		<form class="simple-form" novalidate>
-                    <p> Name <br/>
-			<input id="name" type="text" class="form-control" placeholder="Name"
-				ng-model="task.name" required/>
-                    </p>
-                    <p> Description <br/>
-			<input id="description" type="text" class="form-control" placeholder="Description"
-				ng-model="task.description" required/>
-                    </p>
-                    <p> Context <br/>
-			<span  class="nullable">
-                            <select id="context-select"
-                                    ng-model="task.context" ng-options="context.name for context in contexts">
-				<option id="default" value="">-- choose context --</option>
-                            </select>
-			</span>
-                    </p>
-                    <p> Due date <br/>
-			<input id="due-date" type="date" class="form-control" placeholder="yyyy-MM-dd"
-				ng-model="task.dueDate"/>
-                    </p>
-                    <p> Duration (in minutes)<br/>
-			<input id="duration" type="number" class="form-control" placeholder="Duration"
-				ng-model="task.description"/>
-                    </p>
-                    <p> Priority <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Name</span>
+                            <input id="name" type="text" class="form-control"
+                                   placeholder="Name"
+                                   ng-model="task.name" required/>
+                    </label>
+                    <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Description</span>
+                            <input id="description" type="text" class="form-control"
+                                   placeholder="Description"
+                                   ng-model="task.description" required/>
+                    </label>
+                    <br/>
+                    <label class="item item-input item-select">
+                        <span class="input-label">Context</span>
+			<select id="context-select"
+                                ng-model="task.context" ng-options="context.name for context in contexts">
+                            <option id="default" value="" selected>
+                                -- choose context --
+                            </option>
+                        </select>
+                    </label>
+                    <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Due date</span>
+			<input id="due-date" type="date" class="form-control"
+                               placeholder="yyyy-MM-dd"
+                               ng-model="task.dueDate"/>
+                    </label>
+                    <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Duration (in minutes)</span>
+			<input id="duration" type="number" class="form-control"
+                               placeholder="Duration"
+                               ng-model="task.description"/>
+                    </label>
+                    <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Priority</span>
 			<input id="priority" type="hidden" ng-model="task.priority"/>
-			<a id="priority" ng-click="store_priority(1)">
-                            <img ng-src="yellow_star"/>
-			</a>
-			<a id="medium-priority" ng-click="store_priority(2)">
-                            <img ng-src="orange_star"/>
-			</a>
-			<a id="high-priority" ng-click="store_priority(3)">
-                            <img ng-src="red_star"/>
-			</a>
-                    </p>
-                    <p> Label <br/>
-			<input id="label" type="text" class="form-control" placeholder="Label"
-				ng-model="task.label"/>
-                    </p>
-		</form>
+                        <div class="range">
+                            <i class="icon ion-ios7-star-outline"/>
+                            <input type="range" name="priority"
+                                   min="0" max="3" value="0"
+                                   ng-model="task.priority"/>
+                            <i class="icon ion-ios7-star"/>
+                        </div>
+                    </label>
+                    <br/>
+                    <label class="item item-input">
+                        <span class="input-label">Label</span>
+			<input id="label" type="text" class="form-control"
+                               placeholder="Label"
+                               ng-model="task.label"/>
+                    </label>
+                    <br/>
+                </form>
             </div>
 	</div>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-	<script src="task.js"></script>
-    </body>
-</html>
+    </content>
+ </view>

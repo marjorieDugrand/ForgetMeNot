@@ -10,7 +10,13 @@ angular.module('forget-me-not', ['ionic'])
                     .state('home', {
                         url: '/',
                         templateUrl: 'pages/home.html'
+                    })
+                    .state('new_task', {
+                        url: '/new_task',
+                        templateUrl: 'pages/addTask.html',
+                        controller: 'AddTaskController'
                     });
+                    
 
             $urlRouterProvider.otherwise('/');
         });
