@@ -1,0 +1,16 @@
+{
+    "elements": {
+        "view": {},
+        "ion-header-bar": {},
+        "ion-content": {},
+        "ion-pane": {},
+        "ion-view": {
+            "attributes": {
+                "title": {}
+            }
+        }
+    },
+    "attributes": {
+        "title": {}
+    }
+}

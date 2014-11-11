@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <link rel="stylesheet" href="../lib/ionic/scss/_tabs.scss" type="text/css"/>
+        <link rel="stylesheet" href="../lib/ionic/scss/_modal.scss" type="text/css">
+        <link rel="stylesheet" href="../lib/ionic/css/ionic.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/style.css" type="text/css">
+        <link rel="stylesheet" href="../lib/ionic/scss/_platform.scss" type="text/css"/>
+
+        <title>Consulter Tâches</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="header">
+            <div ng-include="'header.html'"/>
+	</div>
+            
+        <div class="tabs-striped tabs-top tabs-background-dark" id="tabs">
+            <div class="tabs">
+                <a class="tab-item" href="#">
+                    Par contexte
+                </a>
+                <a class="tab-item" href="#">
+                    Par priorité
+                </a>
+                <a class="tab-item" href="#">
+                    Par mot-clé
+                </a>
+                <a class="tab-item" href="#">
+                    <i class="icon ion-star"></i>
+                    Par 
+                </a>
+            </div>
+        </div>
+        <div class="list">
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Aujourd'hui
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Ce soir
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Demain
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Cette semaine
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                La semaine prochaine
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Ce mois-ci
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Le mois prochain
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Un jour
+            </a>
+            <a class="item item-icon-left" href="#">
+                <i class="icon"></i>
+                Pour une date précise
+            </a>
+        </div>
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+	<script src="task.js"></script>
+    </body>
+</html>    
+
