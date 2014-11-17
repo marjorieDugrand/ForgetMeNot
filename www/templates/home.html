@@ -1,5 +1,5 @@
-<view title="HomePage">
-    <content has-header="false">
+<ion-view title="HomePage" ng-app="forget-me-not">
+    <ion-content has-header="false">
         <section id="content">
             <div id="banner">
                 <h1 id="app-name">ForgetMeNot</h1>
@@ -12,7 +12,8 @@
                 </div>
                 <div class="menu-item" id="tasks">
                     <h2 class="section-name" id="tasks-name">Tâches</h2>
-                    <button class="button button-item" id="add-task-button">Ajouter une tâche</button>
+                    <a class="button button-block" id="add-task-button"
+                            ng-href="#/new_task">Ajouter une tâche</a>
                     <button class="button button-item" id="consult-task-button">Consulter une tâche</button>
                 </div>
                 <div class="menu-item" id="contexts">
@@ -26,5 +27,5 @@
                 </div>
             </div>
         </section>
-    </content>
-</view>
+    </ion-content>
+</ion-view>

@@ -1,4 +1,4 @@
-var taskModule = angular.module("task",[]);
+var taskModule = angular.module('task',[]);
 
 var Task = function (id,name,description,context,duration,priority,label,progression, lastModification, dueDate) {
 this.id = id || '';
