@@ -7,43 +7,54 @@ and open the template in the editor.
 <ion-view title="Tâches" ng-app="forget-me-not">
     <ion-content padding="true" has-header="true">
         <ion-list>            
-            <div class="item item-icon-left item-button-right">
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
+            <a class="item item-icon-left item-button-right" ng-href="#">
+                <i class="icon ion-ios7-star"></i>
                 Faire un gâteau
-                <button class="button delete">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-            <div class="item item-icon-left item-button-right">
+                <div class="buttons">
+                    <button class="button button-clear button-dark update" ng-href="#/tasks">
+                        <i class="icon ion-edit"></i>
+                    </button>
+                    <button class="button button-clear delete">
+                        <i class="icon ion-trash-a"></i>
+                    </button>    
+                </div>
+            </a>
+            <a class="item item-icon-left item-button-right" ng-href="#">
                 <i class="icon ion-ios7-star"></i>
                 Relire mes leçons
+                <div class="buttons">
                     <button class="button update">
                         <i class="icon ion-edit"></i>
                     </button>
                     <button class="button delete">
                         <i class="icon ion-trash-a"></i>
-                    </button>
-      
-            </div>
-            <div class="item item-icon-left item-button-right">
-                <i class="icon"></i>
+                    </button>    
+                </div>
+            </a>
+            <a class="item item-icon-left item-button-right" ng-href="#">
+                <i class="icon ion-ios7-star"></i>
                 Aller au cinéma
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-                <button class="button delete">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-            <div class="item item-icon-left item-button-right">
-                <i class="icon"></i>
+                <div class="buttons">
+                    <button class="button update">
+                        <i class="icon ion-edit"></i>
+                    </button>
+                    <button class="button delete">
+                        <i class="icon ion-trash-a"></i>
+                    </button>    
+                </div>
+            </a>
+            <a class="item item-icon-left item-button-right" ng-href="#">
+                <i class="icon ion-ios7-star"></i>
                 Prendre un bain !
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
+                <div class="buttons">
+                    <button class="button update">
+                        <i class="icon ion-edit"></i>
+                    </button>
+                    <button class="button delete">
+                        <i class="icon ion-trash-a"></i>
+                    </button>    
+                </div>
+            </a>
         </ion-list>
     </ion-content>
 </ion-view>
