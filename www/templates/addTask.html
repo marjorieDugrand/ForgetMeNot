@@ -1,22 +1,24 @@
 <ion-view title="new task"> 
-    <ion-content has-header="true" padding="true">
-	<div id="task-block" ng-app="task">
-            
-            <button id="save" class="button icon ion-archive"
-                    href ng-href="/tasks/{{task.id}}"
-                    ng-click="saveTask()"></button>
-            <button id="cancel" class="button icon ion-close-round"
-                    href ng-href="/"
-                    ng-click="cancelTask()"></button>
-            
-            <div id="task-details">
-		<form class="simple-form" novalidate>
-                    <label class="item item-input">
-                        <span class="input-label">Name</span>
-                            <input id="name" type="text" class="form-control"
-                                   placeholder="Name"
-                                   ng-model="task.name" required/>
-                    </label>
+    <ion-content class="has-header padding">
+	
+        <section>
+            <div id="task-block" ng-app="task">
+                <div class="tabs tabs-icon-left">
+                   <button id="save" class="tab-item button button-small pull-right icon ion-archive"
+                        href ng-href="/tasks/{{task.id}}"
+                        ng-click="saveTask()"></button>
+                   <button id="cancel" class="tab-item button button-small pull-right button-assertive icon ion-close-round"
+                       href ng-href="/"
+                       ng-click="cancelTask()"></button>
+                </div>
+                <div id="task-details">
+                    <form class="simple-form" novalidate>
+                        <label class="item item-input">
+                            <span class="input-label">Name</span>
+                                <input id="name" type="text" class="form-control"
+                                       placeholder="Name"
+                                        ng-model="task.name" required/>
+                        </label>
                     <br/>
                     <label class="item item-input">
                         <span class="input-label">Description</span>
@@ -71,5 +73,6 @@
                 </form>
             </div>
 	</div>
+        </section>
     </ion-content>
  </ion-view>
