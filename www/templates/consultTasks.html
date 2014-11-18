@@ -5,7 +5,8 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <ion-view title="Consulter les tâches" ng-app=""forget-me-not>
-    <div class="tabs-striped tabs-top tabs-background-stable tabs-dark">
+    <section>
+    <div class="tabs-striped tabs-top tabs-background-stable tabs-dark has-header padding">
         <div class="tabs tabs-icon-left">
             <a class="tab-item" href="#">
                 <i class="icon ion-ios7-world"></i>
@@ -21,12 +22,13 @@ and open the template in the editor.
             </a>
         </div>
     </div>
-    <ion-content padding="true">     
-        <div class="list">
+    <ion-content class="has-header padding">     
+        <div class="list has-header padding">
             <a class="item item-icon-left" ng-href="#/tasks">
                 <i class="icon ion-ios7-sunny"></i>
                 Aujourd'hui
             </a>
+            
             <a class="item item-icon-left" href="#">
                 <i class="icon ion-ios7-cloudy-night"></i>
                 Ce soir
@@ -60,6 +62,7 @@ and open the template in the editor.
                 Pour une date précise
             </a>
         </div>
+    </section>
     </ion-content>
 </ion-view>   
 
