@@ -13,7 +13,7 @@
         -->
     </head>
    
-    <body ng-app="forget-me-not">
+    <body ng-app="forget-me-not" ng-controller="fmnController">
 
        <!-- <div id="user-header" class="bar bar-header bar-light">
             <img id="logo" src="logo"/>
@@ -22,6 +22,16 @@
             <button class="button icon ion-gear-a" href ng-href="#/settings"></button>
         </div>-->   
         <ion-nav-view animation="slide-left-right"></ion-nav-view>
+        
+        <header ng-hide="isWelcomePage()" id="user-header" class="bar bar-header bar-energized">
+           <img id="logo" src="logo"/>
+       <h1 id="username" class="title"> <!--{{editingUser.firstName}} --> Marjorie </h1>
+        <a class="button icon-left ion-home" href ng-href="#/"/>
+      <a class="button icon ion-gear-a" href ng-href="#/settings"/>
+    </header>
+        
+        
+        
         
         <!-- ionic/angularjs js -->
         <script src="lib/ionic/js/ionic.bundle.js"></script>
