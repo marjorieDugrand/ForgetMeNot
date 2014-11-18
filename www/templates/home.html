@@ -1,5 +1,6 @@
-<!--<ion-view title="HomePage" ng-app="forget-me-not">
+<ion-view title="HomePage" has-header="false" ng-app="forget-me-not">
     <ion-content has-header="false">
+        
         <section id="content">
             <div id="banner">
                 <h1 id="app-name">ForgetMeNot</h1>
@@ -7,54 +8,31 @@
 
             <div id="main-content">
                 <div class="menu-item" id="notifications">
-                    <h2 class="section-name" id="notifications-name">Notifications</h2>
+                    <h2 class="section-name" id="notifications">Notifications</h2>
                     Blablabla ceci sont des notifications.
                 </div>
                 <div class="menu-item" id="tasks">
                     <h2 class="section-name" id="tasks-name">Tâches</h2>
-                    <a class="button button-block" id="add-task-button"
-                            ng-href="#/new_task">Ajouter une tâche</a>
-                    <button class="button button-item" id="consult-task-button">Consulter une tâche</button>
+                    <a class="button button-stable button-block icon icon-right ion-chevron-right"
+                       id="add-task-button"
+                       ng-href="#/new_task">Ajouter une tâche</a>
+                    <a class="button button-stable button-block icon icon-right ion-chevron-right"
+                       
+                       ng-href="#/lists">Consulter les tâches</a>
                 </div>
                 <div class="menu-item" id="contexts">
                     <h2 class="section-name" id="contexts-name">Contextes</h2>
-                    <button class="button button-item" id="add-context-button">Ajouter un contexte</button>
-                    <button class="button button-item" id="consul-context-button">Consuler les contextes</button>
+                    <button class="button button-block button-stable"
+                            id="add-context-button">Ajouter un contexte</button>
+                    <button class="button button-block button-stable"
+                            id="consul-context-button">Consuler les contextes</button>
                 </div>
                 <div class="menu-item" id="settings">
                     <h2 class="section-name" id="settings-name">Paramètres</h2>
-                    <button class="button button-item" id="access-settings-button">Accéder aux réglages</button>
+                    <button class="button button-stable button-block icon icon-right ion-chevron-right"
+                            id="access-settings-button">Accéder aux réglages</button>
                 </div>
             </div>
         </section>
-    </ion-content>
-</ion-view>
--->
-<ion-view title="Forget Me Not" ng-app="forget-me-not">
-    <ion-content has-header="false">
-        <section id="content">
-            <div id="banner">
-                <h1 id="app-name">ForgetMeNot</h1>
-            </div>
-            <div id="main-content">
-                <div class="menu-item" id="notifications">
-                    <h2 class="section-name" id="notifications-name">Notifications</h2>
-                    Blablabla ceci sont des notifications.
-                </div>
-                <div class="menu-item" id="tasks">
-                    <h2 class="section-name" id="tasks-name">Tâches</h2>
-                    <a class="button button-stable button-block icon icon-right ion-chevron-right" ng-href="#/new_task">Ajouter une tâche</a>
-                    <a class="button button-stable button-block icon icon-right ion-chevron-right" ng-href="#/lists">Consulter les tâches</a>
-                </div>
-                <div class="menu-item" id="contexts">
-                    <h2 class="section-name" id="contexts-name">Contextes</h2>
-                    <button class="button button-block button-stable" id="add-context-button">Ajouter un contexte</button>
-                    <button class="button button-block button-stable" id="consul-context-button">Consuler les contextes</button>
-                </div>
-                <div class="menu-item" id="settings">
-                    <h2 class="section-name" id="settings-name">Paramètres</h2>
-                    <a class="button button-stable button-block icon icon-right ion-chevron-right" ng-href="#/settings">Accéder aux réglages</a>
-                </div>
-            </div>
     </ion-content>
 </ion-view>
