@@ -1,11 +1,34 @@
 {
     "elements": {
+        "div": {
+            "attributes": {
+                "id": {},
+                "class": {}
+            }
+        },
         "view": {},
+        "ion-nav-view": {
+            "attributes": {
+                "animation": {}
+            }
+        },
         "ion-header-bar": {},
-        "ion-content": {},
+        "ion-content": {
+            "attributes": {
+                "padding": {},
+                "has-header": {}
+            }
+        },
+        "ion-nav-bar": {
+            "attributes": {
+                "animation": {}
+            }
+        },
         "ion-pane": {},
         "ion-view": {
             "attributes": {
+                "ng-app": {},
+                "forget-me-not": {},
                 "title": {}
             }
         }
