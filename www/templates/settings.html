@@ -9,14 +9,15 @@ and open the template in the editor.
     <ion-content class="has-header padding">
         <div class="list">
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Nom d'utilisateur</span>
-                <input type="text" placeholder="Annabelle">
+                <span class="input-label">Username</span>
+                <input type="text" placeholder="Annabelle"
+                       ng-model="user.username">
             </label>
 
             <div class="item item-toggle">
                 Géolocalisation
                 <label class="toggle toggle-dark">
-                    <input type="checkbox">
+                    <input type="checkbox" ng-checked="{{user.geolocalization}}">
                     <div class="track">
                         <div class="handle"></div>
                     </div>
@@ -25,12 +26,10 @@ and open the template in the editor.
 
             <label class="item item-input item-select">
                 <div class="input-label">
-                    Langue
+                    Language
                 </div>
-                <select>
-                    <option selected>Français</option>
-                    <option>Anglais</option>
-                    <option>Espagnol</option>
+                <select id="language-select" ng-model="user.language"
+                        ng-options="language for language in languages">
                 </select>
             </label>
         </div>

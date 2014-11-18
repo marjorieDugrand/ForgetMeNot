@@ -16,6 +16,10 @@ this.dueDate = dueDate || '';
 var TaskService = function ($http, tasks) {
 this.$http = $http;
 this.tasks = tasks;
+tasks.push(new Task(0,'bain', 'prendre un bain', '', 30, 1));
+tasks.push(new Task(1,'courses', 'faire les courses', '', 30, 2));
+tasks.push(new Task(2,'projet', 'finir projet', '', 30, 3));
+tasks.push(new Task(2,'repas', 'préparer repas', '', 30, 0));
 };
 
 var tasks=[];
@@ -41,6 +45,21 @@ $scope.store_priority = function(level) {
 }]);
 
 taskModule.controller("TaskDetailsController", ["$scope","TaskService", function($scope, TaskService) {
-
-
+        $scope.tasks = TaskService.tasks;
+        $scope.show = false;
+        $scope.list ="";
+        $scope.showList = function(list) {
+            if($scope.list !== list) {
+                $scope.tasks = TaskService.tasks;
+                $scope.show = true;
+                $scope.list = list;
+                //TODO : modify so it looks for the proper list in local storage
+            } else {
+                $scope.show = false;
+                $scope.list = "";
+            }   
+        };
+        $scope.showListDetails = function() {
+            return $scope.show;
+        };
 }]);

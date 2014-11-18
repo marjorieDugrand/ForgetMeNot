@@ -4,7 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<ion-view title="Consulter les tâches" ng-app=""forget-me-not>
+<ion-view title="Consulter les tâches" ng-app="task">
     <section>
     <div class="tabs-striped tabs-top tabs-background-stable tabs-dark has-header padding">
         <div class="tabs tabs-icon-left">
@@ -25,40 +25,69 @@ and open the template in the editor.
 
     <ion-content class="has-header has-tabs-top padding">     
         <div class="list has-header padding">
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('today')">
                 <i class="icon ion-ios7-sunny"></i>
                 Aujourd'hui
             </a>
-            
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <div class="card" id="taskList" ng-show="showListDetails()">
+                <div ng-repeat="task in tasks">
+                    <a class="item item-icon-left item-button-right" ng-href="#/tasks/{{task.id}}">
+                        <div ng-switch="{{task.priority}}">
+                            <i ng-switch-when=1 class="icon ion-ios7-star calm"></i>
+                            <i ng-switch-when=2 class="icon ion-ios7-star energized"></i>
+                            <i ng-switch-when=3 class="icon ion-ios7-star assertive"></i>
+                            <i ng-switch-default class="icon ion-ios7-star stable"></i>
+                        </div>
+                        {{task.name}}
+                        <div class="buttons">
+                            <button class="button button-clear button-dark" ng-href="#">
+                                <i class="icon ion-edit"></i>
+                            </button>
+                            <button class="button button-clear button-dark">
+                                <i class="icon ion-trash-a"></i>
+                            </button>    
+                        </div>
+                    </a>
+                </div>
+            </div>          
+            <a class="item item-icon-left" href=""
+               ng-click="showList('tonight')">
                 <i class="icon ion-ios7-cloudy-night"></i>
                 Ce soir
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('tomorrow')">
                 <i class="icon ion-ios7-partlysunny"></i>
                 Demain
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('thisweek')">
                 <i class="icon ion-ios7-cloudy"></i>
                 Cette semaine
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('nextweek')">
                 <i class="icon ion-ios7-rainy"></i>
                 La semaine prochaine
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('thismonth')">
                 <i class="icon ion-ios7-thunderstorm"></i>
                 Ce mois-ci
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('nextmonth')">
                 <i class="icon ion-ios7-snowy"></i>
                 Le mois prochain
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showList('oneday')">
                 <i class="icon ion-ios7-moon"></i>
                 Un jour
             </a>
-            <a class="item item-icon-left" ng-href="#/tasks">
+            <a class="item item-icon-left" href=""
+               ng-click="showPreciseDateList()">
                 <i class="icon ion-ios7-bell"></i>
                 Pour une date précise
             </a>

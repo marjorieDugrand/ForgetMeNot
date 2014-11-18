@@ -1,5 +1,11 @@
 // Ionic Starter App
 
+var User = function(username, geolocalization, language) {
+    this.username = username;
+    this.geolocalization = geolocalization;
+    this.language = language;
+} 
+
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -8,6 +14,8 @@ angular.module('forget-me-not', ['ionic', 'task'])
                 $scope.isWelcomePage  = function() {
                     return $state.current.name === 'home';
                 };
+                $scope.user = new User('Rajon',false,'Spanish');
+                $scope.languages = ['French', 'English', 'Spanish'];
             })
 
             .run(function ($ionicPlatform) {
@@ -34,16 +42,19 @@ angular.module('forget-me-not', ['ionic', 'task'])
                         controller: 'AddTaskController'
                     })
                     .state('consult_tasks', {
-                        url: '/lists',
-                        templateUrl: "templates/consultTasks.html"
+                        url: '/tasks',
+                        templateUrl: "templates/consultTasks.html",
+                        controller: 'TaskDetailsController'
                     })
                     .state('settings', {
                         url: '/settings',
-                        templateUrl: "templates/settings.html"
+                        templateUrl: "templates/settings.html",
+                        controller:"fmnController"
                     })
                     .state('tasks', {
-                        url: '/tasks',
+                        url: '/lists',
                         templateUrl: "templates/tasksList.html"
+                        
                     });
 
             $urlRouterProvider.otherwise('/');
