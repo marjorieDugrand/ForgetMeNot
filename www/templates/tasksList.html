@@ -7,50 +7,50 @@ and open the template in the editor.
 <ion-view title="Tâches" ng-app="forget-me-not">
     <ion-content class="has-header padding">
         <ion-list>            
-            <a class="item item-icon-left item-button-right" ng-href="#">
+            <a class="item item-icon-left item-button-right">
                 <i class="icon ion-ios7-star"></i>
                 Faire un gâteau
                 <div class="buttons">
                     <button class="button button-clear button-dark" ng-href="#">
                         <i class="icon ion-edit"></i>
                     </button>
-                    <button class="button button-clear button-dark">
+                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
                         <i class="icon ion-trash-a"></i>
                     </button>    
                 </div>
             </a>
-            <a class="item item-icon-left item-button-right" ng-href="#">
+            <a class="item item-icon-left item-button-right">
                 <i class="icon ion-ios7-star"></i>
                 Relire mes leçons
                 <div class="buttons">
                     <button class="button button-clear button-dark">
                         <i class="icon ion-edit"></i>
                     </button>
-                    <button class="button button-clear button-dark">
+                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
                         <i class="icon ion-trash-a"></i>
                     </button>    
                 </div>
             </a>
-            <a class="item item-icon-left item-button-right" ng-href="#">
+            <a class="item item-icon-left item-button-right">
                 <i class="icon ion-ios7-star"></i>
                 Aller au cinéma
                 <div class="buttons">
                     <button class="button button-clear button-dark">
                         <i class="icon ion-edit"></i>
                     </button>
-                    <button class="button button-clear button-dark">
+                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
                         <i class="icon ion-trash-a"></i>
                     </button>    
                 </div>
             </a>
-            <a class="item item-icon-left item-button-right" ng-href="#">
+            <a class="item item-icon-left item-button-right">
                 <i class="icon ion-ios7-star"></i>
                 Prendre un bain !
                 <div class="buttons">
                     <button class="button button-clear button-dark">
                         <i class="icon ion-edit"></i>
                     </button>
-                    <button class="button button-clear button-dark">
+                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
                         <i class="icon ion-trash-a"></i>
                     </button>    
                 </div>
@@ -58,45 +58,3 @@ and open the template in the editor.
         </ion-list>
     </ion-content>
 </ion-view>
-
-<!--
-<div class="list">
-            <div class="item item-icon-left">
-                <i class="icon"></i>
-                Faire un gâteau
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-                <button class="button delete">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-            <div class="item item-icon-left item-button-right">
-                <i class="icon"></i>
-                Relire mes leçons
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-                <button class="button delete">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-            <div class="item item-icon-left item-button-right">
-                <i class="icon"></i>
-                Aller au cinéma
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-                <button class="button delete">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-            <div class="item item-icon-left item-button-right">
-                <i class="icon"></i>
-                Prendre un bain !
-                <button class="button update">
-                    <i class="icon ion-ios7-telephone"></i>
-                </button>
-            </div>
-        </div>
--->

@@ -1,78 +1,72 @@
 <ion-view title="new task"> 
     <ion-content class="has-header padding">
-	
+
         <section>
             <div id="task-block" ng-app="task">
-                <div class="tabs tabs-icon-left">
-                   <button id="save" class="tab-item button button-small pull-right icon ion-archive"
-                        href ng-href="/tasks/{{task.id}}"
-                        ng-click="saveTask()"></button>
-                   <button id="cancel" class="tab-item button button-small pull-right button-assertive icon ion-close-round"
-                       href ng-href="/"
-                       ng-click="cancelTask()"></button>
+                <div class="button-bar">
+                    <button id="save" class="tab-item button button-small pull-right icon ion-archive"
+                            href ng-href="/tasks/{{task.id}}"
+                            ng-click="saveTask()"></button>
+                    <button id="cancel" class="tab-item button button-small pull-right button-assertive icon ion-close-round"
+                            href ng-href="/"
+                            ng-click="cancelTask()"></button>
                 </div>
-                <div id="task-details">
+
+                <div class="list" id="task-details">
                     <form class="simple-form" novalidate>
                         <label class="item item-input">
-                            <span class="input-label">Name</span>
-                                <input id="name" type="text" class="form-control"
-                                       placeholder="Name"
-                                        ng-model="task.name" required/>
+                            <span class="input-label">Nom</span>
+                            <input id="name" type="text" class="form-control"
+                                   placeholder="Nom"
+                                   ng-model="task.name" required/>
                         </label>
-                    <br/>
-                    <label class="item item-input">
-                        <span class="input-label">Description</span>
+                        <label class="item item-input">
+                            <span class="input-label">Description</span>
                             <input id="description" type="text" class="form-control"
                                    placeholder="Description"
                                    ng-model="task.description" required/>
-                    </label>
-                    <br/>
-                    <label class="item item-input item-select">
-                        <span class="input-label">Context</span>
-			<select id="context-select"
-                                ng-model="task.context" ng-options="context.name for context in contexts">
-                            <option id="default" value="" selected>
-                                -- choose context --
-                            </option>
-                        </select>
-                    </label>
-                    <br/>
-                    <label class="item item-input">
-                        <span class="input-label">Due date</span>
-			<input id="due-date" type="date" class="form-control"
-                               placeholder="yyyy-MM-dd"
-                               ng-model="task.dueDate"/>
-                    </label>
-                    <br/>
-                    <label class="item item-input">
-                        <span class="input-label">Duration (in minutes)</span>
-			<input id="duration" type="number" class="form-control"
-                               placeholder="Duration"
-                               ng-model="task.description"/>
-                    </label>
-                    <br/>
-                    <label class="item item-input">
-                        <span class="input-label">Priority</span>
-			<input id="priority" type="hidden" ng-model="task.priority"/>
-                        <div class="range">
-                            <i class="icon ion-ios7-star-outline"/>
-                            <input type="range" name="priority"
-                                   min="0" max="3" value="0"
-                                   ng-model="task.priority"/>
-                            <i class="icon ion-ios7-star"/>
-                        </div>
-                    </label>
-                    <br/>
-                    <label class="item item-input">
-                        <span class="input-label">Label</span>
-			<input id="label" type="text" class="form-control"
-                               placeholder="Label"
-                               ng-model="task.label"/>
-                    </label>
-                    <br/>
-                </form>
+                        </label>
+                        <label class="item item-input item-select">
+                            <span class="input-label">Contexte</span>
+                            <select id="context-select"
+                                    ng-model="task.context" ng-options="context.name for context in contexts">
+                                <option id="default" value="" selected>
+                                    -- choisissez un contexte --
+                                </option>
+                            </select>
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">Date d'échéance</span>
+                            <input id="due-date" type="date" class="form-control"
+                                   placeholder="aaaa-MM-jj"
+                                   ng-model="task.dueDate"/>
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">Durée (en minutes)</span>
+                            <input id="duration" type="number" class="form-control"
+                                   placeholder="Durée"
+                                   ng-model="task.description"/>
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">Priorité</span>
+                            <input id="priority" type="hidden" ng-model="task.priority"/>
+                            <div class="range">
+                                <i class="icon ion-ios7-star-outline"></i>
+                                <input type="range" name="priority"
+                                       min="0" max="3" value="0"
+                                       ng-model="task.priority"/>
+                                <i class="icon ion-ios7-star"></i>
+                            </div>
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">Label</span>
+                            <input id="label" type="text" class="form-control"
+                                   placeholder="Label"
+                                   ng-model="task.label"/>
+                        </label>
+                    </form>
+                </div>
             </div>
-	</div>
         </section>
     </ion-content>
- </ion-view>
+</ion-view>

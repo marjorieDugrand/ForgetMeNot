@@ -16,7 +16,8 @@
         "ion-content": {
             "attributes": {
                 "padding": {},
-                "has-header": {}
+                "has-header": {},
+                "class": {}
             }
         },
         "ion-nav-bar": {
