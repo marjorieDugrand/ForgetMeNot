@@ -6,10 +6,19 @@ and open the template in the editor.
 -->
 <ion-view title="Nouveau contexte" ng-app="forget-me-not">      
     <ion-content class="has-header padding">
+        <div class="button-bar">
+            <button id="save" class="button icon ion-archive"
+                    href ng-href="/tasks/{{task.id}}"
+                    ng-click="saveTask()"></button>
+            <button id="cancel" class="button button-assertive icon ion-close-round"
+                    href ng-href="/"
+                    ng-click="cancelTask()"></button>
+        </div>
+
         <div class="list">
             <label class="item item-input">
                 <span class="input-label">Nom</span>
-                <input type="text">
+                <input type="text" class="form-control" placeholder="Nom">
             </label>
             <div class="item item-checkbox">
                 <label class="checkbox">
@@ -20,7 +29,7 @@ and open the template in the editor.
 
             <label class="item item-input" ng-show="useAddress">
                 <span class="input-label">Adresse</span>
-                <input type="text">
+                <input type="text" class="form-control" placeholder="Adresse">
             </label>
 
             <div class="item item-checkbox">
@@ -29,12 +38,12 @@ and open the template in the editor.
                 </label>
                 Détecter ma localisation actuelle
             </div>
-<!--
-            <div class="item" ng-controller="mapController">
-                <div class="map" id="map" width="425" height="350">
-                </div>
-            </div>
--->
+            <!--
+                        <div class="item" ng-controller="mapController">
+                            <div class="map" id="map" width="425" height="350">
+                            </div>
+                        </div>
+            -->
         </div>
     </ion-content>
 </ion-view>

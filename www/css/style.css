@@ -34,3 +34,11 @@
     color: #424242;
 }
 
+/* Boutons pour addTask et addContext */
+.button-bar {
+    position: relative; 
+    left: 90%; 
+    width: 10%;
+    margin-bottom: 10px;
+}
+
