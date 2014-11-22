@@ -5,7 +5,7 @@
             <div id="task-block" ng-app="task">
                 <div class="tabs tabs-icon-left">
                    <button id="save" class="tab-item button button-small pull-right icon ion-archive"
-                        href ng-href="/tasks/{{task.id}}"
+                        hng-href="#/tasks/{{task.id}}"
                         ng-click="saveTask()"></button>
                    <button id="cancel" class="tab-item button button-small pull-right button-assertive icon ion-close-round"
                        href ng-href="/"
@@ -48,7 +48,7 @@
                         <span class="input-label">Duration (in minutes)</span>
 			<input id="duration" type="number" class="form-control"
                                placeholder="Duration"
-                               ng-model="task.description"/>
+                               ng-model="task.duration"/>
                     </label>
                     <br/>
                     <label class="item item-input">
