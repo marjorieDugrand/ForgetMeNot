@@ -18,7 +18,44 @@ angular.module('forget-me-not', ['ionic', 'task'])
                 $scope.languages = ['French', 'English', 'Spanish'];
             })
 
-            .run(function ($ionicPlatform) {
+        .controller('popupController', function ($scope, $ionicPopup) {
+            $scope.showConfirm = function () {
+                //TODO? afficher le nom de la tâche prête à être supprimée
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Supprimer une tâche',
+                    template: 'Etes-vous sûr de vouloir supprimer cette tâche ?'
+                });
+                confirmPopup.then(function (res) {
+                    if (res) {
+                        console.log('You are sure');
+                        //TODO: supprimer la tâche, afficher un message de confirmation
+                    }
+                    else {
+                        console.log('You are not sure');
+                    }
+                });
+            };
+        })
+/*
+        .controller('mapController', function ($scope) {
+            $scope.showPosition = function (position) {
+                var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
+                $scope.model.map.setCenter(latlng);
+            };
+
+            $scope.getLocation = function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition($scope.showPosition);
+                }
+                else {
+                    console.log("Geolocation is not supported by this browser.");
+                }
+            };
+
+            $scope.getLocation();
+        })
+*/
+        .run(function ($ionicPlatform) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // // for form inputs)
@@ -41,6 +78,10 @@ angular.module('forget-me-not', ['ionic', 'task'])
                         templateUrl: "templates/addTask.html",
                         controller: 'AddTaskController'
                     })
+                    .state('new_context', {
+                        url: '/new_context',
+                        templateUrl: "templates/addContext.html"
+                    })
                     .state('consult_tasks', {
                         url: '/tasks',
                         templateUrl: "templates/consultTasks.html",
@@ -56,6 +97,5 @@ angular.module('forget-me-not', ['ionic', 'task'])
                         templateUrl: "templates/tasksList.html"
                         
                     });
-
             $urlRouterProvider.otherwise('/');
         });

@@ -31,18 +31,14 @@
 
 .section-name {
     text-align: center;
-    font-family: 'Ionicons';
     color: #424242;
 }
 
-.button-item {
-    display: block;
-    background-color: #424242;
-    color: #e9e9e9;
-    margin-bottom: 5px;
-}
-
-.button-item:hover {
-    color: #e9e9e9;
+/* Boutons pour addTask et addContext */
+.button-bar {
+    position: relative; 
+    left: 90%; 
+    width: 10%;
+    margin-bottom: 10px;
 }
 
