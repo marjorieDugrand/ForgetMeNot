@@ -1,10 +1,5 @@
 // Ionic Starter App
 
-var User = function(username, geolocalization, language) {
-    this.username = username;
-    this.geolocalization = geolocalization;
-    this.language = language;
-} 
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -13,9 +8,16 @@ angular.module('forget-me-not', ['ionic', 'task'])
         .controller('fmnController',function($scope, $state) {
                 $scope.isWelcomePage  = function() {
                     return $state.current.name === 'home';
-                };
-                $scope.user = new User('Rajon',false,'Spanish');
-                $scope.languages = ['French', 'English', 'Spanish'];
+                }; 
+                
+                $scope.languages = getLanguages(this);
+                $scope.user = getUser('Rajon',this);
+                $scope.setUser = function(user) {
+                    $scope.user  = user;
+                }
+                $scope.setLanguages = function(languages) {
+                    $scope.languages = languages;
+                }
             })
 
         .controller('popupController', function ($scope, $ionicPopup) {
