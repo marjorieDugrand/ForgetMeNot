@@ -4,23 +4,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('forget-me-not', ['ionic', 'task'])
-        .controller('fmnController',function($scope, $state) {
-                $scope.isWelcomePage  = function() {
-                    return $state.current.name === 'home';
-                }; 
-                
-                $scope.languages = getLanguages(this);
-                $scope.user = getUser('Rajon',this);
-                $scope.setUser = function(user) {
-                    $scope.user  = user;
-                }
-                $scope.setLanguages = function(languages) {
-                    $scope.languages = languages;
-                }
-            })
+var fmnApp = angular.module('forget-me-not', ['ionic', 'task']);
 
-        .controller('popupController', function ($scope, $ionicPopup) {
+fmnApp.controller('popupController', function ($scope, $ionicPopup) {
             $scope.showConfirm = function () {
                 //TODO? afficher le nom de la tâche prête à être supprimée
                 var confirmPopup = $ionicPopup.confirm({
