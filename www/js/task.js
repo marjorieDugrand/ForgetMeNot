@@ -1,55 +1,36 @@
 var taskModule = angular.module('task',[]);
 
-var Task = function (id,name,description,context,duration,priority,label,progression, lastModification, dueDate) {
-this.id = id || '';
-this.name = name || '';
-this.description = description || '';
-this.context = context || '';
-this.duration = duration || '';
-this.priority = priority || 0;
-this.label = label || '';
-this.progression = progression || 0;
-this.lastModification = lastModification || '';
-this.dueDate = dueDate || '';
-};
+taskModule.controller("AddTaskController", function ($scope, userService, databaseService) {
 
-var TaskService = function ($http, tasks) {
-this.$http = $http;
-this.tasks = tasks;
-tasks.push(new Task(0,'bain', 'prendre un bain', '', 30, 1));
-tasks.push(new Task(1,'courses', 'faire les courses', '', 30, 2));
-tasks.push(new Task(2,'projet', 'finir projet', '', 30, 3));
-tasks.push(new Task(2,'repas', 'préparer repas', '', 30, 0));
-};
+    $scope.task = new Task();
 
-var tasks=[];
+    $scope.saveTask = function() {
 
-taskModule.service("TaskService", ["$http", function($http) {return new TaskService($http,tasks);}]);
-taskModule.controller("AddTaskController", ["$scope", "TaskService", function ($scope, TaskService) {
+        $scope.task.owner = userService.loadUser().username;
+        $scope.task.lastModification = Date.now();
+	databaseService.storeTask($scope.task).then(function(result) {
+           alert("Task " + result.name + "saved"); 
+        });
+    };
 
-$scope.task = new Task();
-
-$scope.saveTask = function() {
-	TaskService.tasks.push($scope.task);
-};
-
-$scope.cancelTask = function() {
+    $scope.cancelTask = function() {
 	$scope.task = new Task();
-}
+    };
 
-$scope.store_priority = function(level) {
-    if(0 <= level && level <= 3) {
-        $scope.task.priority = level; 
-    }
-}
-}]);
+    $scope.store_priority = function(level) {
+        if(0 <= level && level <= 3) {
+            $scope.task.priority = level; 
+        }
+    };
+});
 
-taskModule.controller("TaskDetailsController", ["$scope","TaskService", function($scope, TaskService) {
-        $scope.tasks = TaskService.tasks;
-        $scope.show = false;
-        $scope.list ="";
-        $scope.showList = function(list) {
-            if($scope.list !== list) {
+taskModule.controller("TaskDetailsController", function($scope, databaseService) {
+    $scope.tasks;
+    $scope.show = false;
+    $scope.list ="";
+    $scope.showList = function(list) {
+        if($scope.list !== list) {
+            databaseService
                 $scope.tasks = TaskService.tasks;
                 $scope.show = true;
                 $scope.list = list;
@@ -62,4 +43,4 @@ taskModule.controller("TaskDetailsController", ["$scope","TaskService", function
         $scope.showListDetails = function() {
             return $scope.show;
         };
-}]);
+});

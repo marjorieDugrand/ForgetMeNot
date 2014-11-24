@@ -8,6 +8,9 @@
 
 fmnApp.service("databaseService", function($q) {
     this.$q = $q;
+    this.a = 2;
+    
+    var fmnDB;
     var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
     
@@ -19,20 +22,20 @@ fmnApp.service("databaseService", function($q) {
         };
     
         request.onsuccess = function(evt) {
-            var db = request.result;
-            dbPromise.resolve(db);
+            fmnDB = request.result;
+            dbPromise.resolve(fmnDB);
         };
 
         request.onupgradeneeded = function (evt) {
-            var db = evt.currentTarget.result;
-            var usersOS = db.createObjectStore("users", 
+            fmnDB = evt.currentTarget.result;
+            var usersOS = fmnDB.createObjectStore("users", 
                             { keyPath: "user_id", autoIncrement: true });
             usersOS.createIndex("username", "username", { unique: true });
             usersOS.createIndex("email", "email", { unique: true });
             usersOS.createIndex("language", "language", { unique: false });
             usersOS.createIndex("geolocalisation", "geolocalisation", { unique: false });
 
-            var tasksOS = db.createObjectStore("tasks", 
+            var tasksOS = fmnDB.createObjectStore("tasks", 
                             { keyPath: "task_id", autoIncrement: true });
             tasksOS.createIndex("name", "name", { unique: false });
             tasksOS.createIndex("owner", "owner", {unique: false });
@@ -45,13 +48,13 @@ fmnApp.service("databaseService", function($q) {
             tasksOS.createIndex("dueDate", "dueDate", { unique: false });
             tasksOS.createIndex("lastModification", "lastModification", { unique: false });	
 		
-            var contextsOS = db.createObjectStore("contexts", 
+            var contextsOS = fmnDB.createObjectStore("contexts", 
                                 { keyPath: "context_id", autoIncrement: true });
                 contextsOS.createIndex("name", "name", { unique: false });
                 contextsOS.createIndex("owner", "owner", { unique: false });
                 contextsOS.createIndex("location", "location", { unique: false });
 
-            var dateListsOS = db.createObjectStore("dateLists", 
+            var dateListsOS = fmnDB.createObjectStore("dateLists", 
                                 { keyPath: "list_id", autoIncrement: true });
                 dateListsOS.createIndex("name", "name", { unique: false });
                 dateListsOS.createIndex("owner", "owner", { unique: false });
@@ -62,7 +65,7 @@ fmnApp.service("databaseService", function($q) {
                 { name: "English" }
             ];
 
-            var languagesOS = db.createObjectStore("languages", 
+            var languagesOS = fmnDB.createObjectStore("languages", 
                                 { keyPath: "language_id", autoIncrement: true }); 
             languagesOS.createIndex("name", "name", { unique: true });
             var i;	
@@ -70,16 +73,14 @@ fmnApp.service("databaseService", function($q) {
                 languagesOS.add(languagesData[i]);
             }
             addUser('Rajon', 'rajon.rondo@gmail.com', 'English', 'true');
-            dbPromise.resolve(db);
+            dbPromise.resolve(fmnDB);
         
         };
         return dbPromise.promise;
     };
-
-    this.fmnDB = this.initDB();
     
     this.addUser = function(username, email, language, geolocalisation) {   
-        var transaction = this.fmnDB.transaction(['users'], 'readwrite');
+        var transaction = fmnDB.transaction(['users'], 'readwrite');
         var objectStore = transaction.objectStore("users");                    
         var request = objectStore.add({ username: username,
                                         email: email,
@@ -90,6 +91,8 @@ fmnApp.service("databaseService", function($q) {
         };
     };
 
+    var user;
+    
     this.getUser = function(username) {
         var userPromise = this.$q.defer();
         var transaction = fmnDB.transaction(['users'],'readonly');
@@ -97,17 +100,30 @@ fmnApp.service("databaseService", function($q) {
         var index = store.index('username');
         index.get(username).onsuccess = function(evt) {
             var userResult = evt.target.result;
-            var user = new User(userResult.username,
+            user = new User(userResult.username,
                                 userResult.email,
                                 userResult.geolocalisation,
                                 userResult.language);         
-            console.log('user recovered');
+            
             userPromise.resolve(user);
+            console.log('user recovered');
         };
-        return userPromise.promise; 
+        return userPromise.promise;
     };
-
+    
     this.getLanguages = function() {
         return ['French', 'English', 'Spanish'];
+    };
+    
+    this.storeTask = function(task) {
+        var storePromise = $q.defer();
+        var transaction = fmnDB.transaction(['tasks'], 'readwrite');
+        var objectStore = transaction.objectStore("tasks");                    
+        var request = objectStore.add(task);
+        request.onsuccess = function (evt) {
+            console.log("task " + username + " successfully added");
+            storePromise.resolve(task);
+        };
+        return storePromise.promise;
     };
 });
