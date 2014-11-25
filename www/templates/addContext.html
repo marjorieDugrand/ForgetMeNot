@@ -30,7 +30,8 @@ and open the template in the editor.
 
             <label class="item item-input" ng-show="addressUsed()">
                 <span class="input-label">Address</span>
-                <input type="text" class="form-control" placeholder="Address">
+                <input type="text" class="form-control" ng-model="context.location"
+                       placeholder="Address">
             </label>
 
             <div class="item item-checkbox">

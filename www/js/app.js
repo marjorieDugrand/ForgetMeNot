@@ -74,6 +74,11 @@ fmnApp.controller('popupController', function ($scope, $ionicPopup) {
                     .state('consult_tasks', {
                         url: '/tasks',
                         templateUrl: "templates/consultTasks.html",
+                        controller: 'TaskListsController'
+                    })
+                    .state('task_details', {
+                        url: '/tasks/:taskId',
+                        templateUrl: "templates/taskDetails.html",
                         controller: 'TaskDetailsController'
                     })
                     .state('settings', {

@@ -111,8 +111,32 @@ fmnApp.service("databaseService", function($q) {
     };
     
     this.getLanguages = function() {
-        return ['French', 'English', 'Spanish'];
+        var languages;
+        getRecords(['languages'], 'languages').then(function(result) {
+            languages = result;
+        });
+        return languages;
     };
+    
+    var getRecords = function(transactionO, store) {
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(transactionO, 'readonly').objectStore(store);
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                records.push(record);
+                cursor.continue();
+            } else {
+                console.log("Cannot recover records");
+            };
+            recordsPromise.resolve(records);
+        };
+        return recordsPromise.promise;
+    };
+    
     
     var storeContent = function(transactionO, store, object) {
         var storePromise = $q.defer();
@@ -141,6 +165,29 @@ fmnApp.service("databaseService", function($q) {
             key = result;
         }); 
         return key;
+    };  
+    
+    this.getTask = function(taskId) {
+        var task;
+        getContentByKey(['tasks'], "tasks", taskId).then(function(result) {
+            task = new Task(result.task_id, result.name, result.owner,
+                            result.description, result.context, result.duration,
+                            result.priority, result.label, result.progression,
+                            result.dueDate, result.lastModification);
+        });
+   
+        return task;
     };
     
+    var getContentByKey = function(transactionO, store, key) {
+        var objectPromise = $q.defer();
+        var transaction = fmnDB.transaction(transactionO);
+        var objectStore = transaction.objectStore(store);
+        var request = objectStore.get(key);
+        request.onsuccess = function(event) {
+          objectPromise.resolve(event.target.result);
+          console.log("ok");
+        };
+        return objectPromise.promise;
+    };
 });

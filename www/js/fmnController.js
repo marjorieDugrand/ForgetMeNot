@@ -14,6 +14,7 @@ fmnApp.service('userService', function(databaseService, $q) {
         } else {   
             this.initialized = true;
             databaseService.initDB().then(function() {
+                
                 appLanguages = databaseService.getLanguages();
                 databaseService.getUser('Rajon').then(function(result) {
                     appUser = result;

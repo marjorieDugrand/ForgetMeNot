@@ -47,12 +47,13 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
     
     $scope.checkGeolocation = function() {
       if(userService.loadUser().geolocalization) {
-          if (navigator.geolocation) {
+         /* ANAIS TODO
+          *  if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition($scope.context.location);
               $scope.geolocationMessage = 'Your location: ' + $scope.context.location;
           } else {
               $scope.geolocationMessage = "Geolocation is not supported by this browser.";
-          }
+          }*/
       } else {
           $scope.geolocationMessage = "Please modify your settings to accept geolocation.";
       }  

@@ -22,7 +22,7 @@ taskModule.controller("AddTaskController", function ($scope, userService, databa
     };
 });
 
-taskModule.controller("TaskDetailsController", function($scope, databaseService) {
+taskModule.controller("TaskListsController", function($scope, databaseService) {
     $scope.tasks;
     $scope.show = false;
     $scope.list ="";
@@ -41,4 +41,8 @@ taskModule.controller("TaskDetailsController", function($scope, databaseService)
         $scope.showListDetails = function() {
             return $scope.show;
         };
+});
+
+taskModule.controller("TaskDetailsController", function($scope, $stateParams, databaseService) {
+    $scope.task = databaseService.getTask(parseInt($stateParams.taskId));
 });

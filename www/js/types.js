@@ -11,7 +11,9 @@ var User = function(username, email, geolocalization, language) {
     this.language = language;
 };
 
-var Task = function (name,owner,description,context,duration,priority,label,progression,lastModification,dueDate) {
+var Task = function (task_id, name, owner, description, context, duration,
+                     priority, label, progression, dueDate, lastModification) {
+    this.task_id = task_id || null;
     this.name = name || '';
     this.owner = owner || '';
     this.description = description || '';
@@ -20,8 +22,8 @@ var Task = function (name,owner,description,context,duration,priority,label,prog
     this.priority = priority || 0;
     this.label = label || '';
     this.progression = progression || 0;
-    this.lastModification = lastModification || '';
     this.dueDate = dueDate || '';
+    this.lastModification = lastModification || '';  
 };
 
 var Context = function(name, owner, location) {
