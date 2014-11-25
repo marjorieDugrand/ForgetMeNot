@@ -8,35 +8,41 @@ and open the template in the editor.
     <ion-content class="has-header padding">
         <div class="button-bar">
             <button id="save" class="button icon ion-archive"
-                    href ng-href="/tasks/{{task.id}}"
-                    ng-click="saveTask()"></button>
+                    ng-href="#/contexts/{{context.id}}"
+                    ng-click="saveContext()"></button>
             <button id="cancel" class="button button-assertive icon ion-close-round"
-                    href ng-href="/"
-                    ng-click="cancelTask()"></button>
+                    ng-href="#/"
+                    ng-click="cancelContext()"></button>
         </div>
 
         <div class="list">
             <label class="item item-input">
-                <span class="input-label">Nom</span>
-                <input type="text" class="form-control" placeholder="Nom">
+                <span class="input-label">Name</span>
+                <input type="text" class="form-control" placeholder="Nom"
+                       ng-model="context.name"/>
             </label>
             <div class="item item-checkbox">
                 <label class="checkbox">
-                    <input type="checkbox" ng-model="useAddress">
+                    <input type="checkbox" ng-model="addchecked" ng-change="addressChoiceChange()"/>
                 </label>
-                Localiser avec une adresse
+                Locate with an address
             </div>
 
-            <label class="item item-input" ng-show="useAddress">
-                <span class="input-label">Adresse</span>
-                <input type="text" class="form-control" placeholder="Adresse">
+            <label class="item item-input" ng-show="addressUsed()">
+                <span class="input-label">Address</span>
+                <input type="text" class="form-control" placeholder="Address">
             </label>
 
             <div class="item item-checkbox">
                 <label class="checkbox">
-                    <input type="checkbox">
+                    <input type="checkbox" ng-model="addchecked"
+                           ng-change="geolocationChoiceChange()"
+                           ng-true-value="false"/>
                 </label>
                 Détecter ma localisation actuelle
+            </div>
+            <div class="card" ng-show="geolocationUsed()">
+                <span>{{getGeolocationMessage()}}</span>
             </div>
             <!--
                         <div class="item" ng-controller="mapController">

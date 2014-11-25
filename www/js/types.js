@@ -11,7 +11,7 @@ var User = function(username, email, geolocalization, language) {
     this.language = language;
 };
 
-var Task = function (name,owner, description,context,duration,priority,label,progression, lastModification, dueDate) {
+var Task = function (name,owner,description,context,duration,priority,label,progression,lastModification,dueDate) {
     this.name = name || '';
     this.owner = owner || '';
     this.description = description || '';
@@ -24,4 +24,9 @@ var Task = function (name,owner, description,context,duration,priority,label,pro
     this.dueDate = dueDate || '';
 };
 
+var Context = function(name, owner, location) {
+    this.name = name || '';
+    this.owner = owner || '';
+    this.location = location || '';
+};
 

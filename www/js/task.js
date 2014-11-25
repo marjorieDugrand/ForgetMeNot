@@ -8,9 +8,7 @@ taskModule.controller("AddTaskController", function ($scope, userService, databa
 
         $scope.task.owner = userService.loadUser().username;
         $scope.task.lastModification = Date.now();
-	databaseService.storeTask($scope.task).then(function(result) {
-           alert("Task " + result.name + "saved"); 
-        });
+	databaseService.storeTask($scope.task); 
     };
 
     $scope.cancelTask = function() {
@@ -30,7 +28,7 @@ taskModule.controller("TaskDetailsController", function($scope, databaseService)
     $scope.list ="";
     $scope.showList = function(list) {
         if($scope.list !== list) {
-            databaseService
+           // databaseService
                 $scope.tasks = TaskService.tasks;
                 $scope.show = true;
                 $scope.list = list;

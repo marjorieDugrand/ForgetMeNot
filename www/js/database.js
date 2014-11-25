@@ -8,7 +8,6 @@
 
 fmnApp.service("databaseService", function($q) {
     this.$q = $q;
-    this.a = 2;
     
     var fmnDB;
     var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
@@ -115,15 +114,33 @@ fmnApp.service("databaseService", function($q) {
         return ['French', 'English', 'Spanish'];
     };
     
-    this.storeTask = function(task) {
+    var storeContent = function(transactionO, store, object) {
         var storePromise = $q.defer();
-        var transaction = fmnDB.transaction(['tasks'], 'readwrite');
-        var objectStore = transaction.objectStore("tasks");                    
-        var request = objectStore.add(task);
+        var transaction = fmnDB.transaction(transactionO, 'readwrite');
+        var objectStore = transaction.objectStore(store);                    
+        var request = objectStore.add(object);
         request.onsuccess = function (evt) {
-            console.log("task " + username + " successfully added");
-            storePromise.resolve(task);
+            storePromise.resolve(evt.target.result);
         };
         return storePromise.promise;
     };
+    
+    this.storeTask = function(task) {
+        var key;
+        storeContent(['tasks'], "tasks", task).then(function(result) {
+            console.log("task " + task.name + " successfully added");
+            key = result;
+        });
+        return key;
+    };
+    
+    this.storeContext = function(context) {
+        var key;
+        storeContent(['contexts'], 'contexts', context).then(function(result) {
+            console.log("context " + context.name + " successfully added");
+            key = result;
+        }); 
+        return key;
+    };
+    
 });

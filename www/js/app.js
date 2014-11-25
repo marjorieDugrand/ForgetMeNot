@@ -68,7 +68,8 @@ fmnApp.controller('popupController', function ($scope, $ionicPopup) {
                     })
                     .state('new_context', {
                         url: '/new_context',
-                        templateUrl: "templates/addContext.html"
+                        templateUrl: "templates/addContext.html",
+                        controller: 'ContextController'
                     })
                     .state('consult_tasks', {
                         url: '/tasks',
