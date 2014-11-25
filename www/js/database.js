@@ -99,11 +99,11 @@ fmnApp.service("databaseService", function($q) {
         var index = store.index('username');
         index.get(username).onsuccess = function(evt) {
             var userResult = evt.target.result;
-            user = new User(userResult.username,
+            user = new User(userResult.user_id,
+                            userResult.username,
                                 userResult.email,
                                 userResult.geolocalisation,
                                 userResult.language);         
-            
             userPromise.resolve(user);
             console.log('user recovered');
         };
@@ -111,11 +111,45 @@ fmnApp.service("databaseService", function($q) {
     };
     
     this.getLanguages = function() {
-        var languages;
+        var languages = [];
         getRecords(['languages'], 'languages').then(function(result) {
-            languages = result;
+            for(var l=0; l < result.length; l++) {
+                languages.push(new Language(result[l].language_id, result[l].name));
+            }
         });
         return languages;
+    };
+    
+    this.getUserContexts = function(user_id) {
+        var contexts = [];
+        getRecordsWithCondition(['contexts'], 'contexts', user_id).then(function(result) {
+            for(var c=0; c < result.length; c++) {
+                contexts.push(new Context(result[l].context_id, result[l].name,
+                                          result[l].owner, result[l].location));
+            }
+        });
+        return contexts;
+    };
+    
+    var getRecordsWithCondition = function(transactionO, store, condition) {
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(transactionO, 'readonly').objectStore(store);
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                if(record.owner === condition) {
+                    records.push(record);
+                }
+                cursor.continue();
+            } else {
+                console.log("Cannot recover more records");
+            };
+            recordsPromise.resolve(records);
+        };
+        return recordsPromise.promise;
     };
     
     var getRecords = function(transactionO, store) {
@@ -130,7 +164,7 @@ fmnApp.service("databaseService", function($q) {
                 records.push(record);
                 cursor.continue();
             } else {
-                console.log("Cannot recover records");
+                console.log("Cannot recover more records");
             };
             recordsPromise.resolve(records);
         };

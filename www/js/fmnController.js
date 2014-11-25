@@ -6,6 +6,7 @@
 fmnApp.service('userService', function(databaseService, $q) {
     var appUser;
     var appLanguages;
+    var userContexts;
     this.initialized = false;
     this.serviceInit = function() {
         var servicePromise = $q.defer();
@@ -18,6 +19,7 @@ fmnApp.service('userService', function(databaseService, $q) {
                 appLanguages = databaseService.getLanguages();
                 databaseService.getUser('Rajon').then(function(result) {
                     appUser = result;
+                    userContexts = databaseService.getUserContexts(appUser.user_id);
                     servicePromise.resolve();
                 });
             });
@@ -29,6 +31,9 @@ fmnApp.service('userService', function(databaseService, $q) {
     };
     this.loadLanguages = function () {
         return appLanguages;
+    };
+    this.loadUserContexts = function() {
+        return userContexts;
     };
 });
 

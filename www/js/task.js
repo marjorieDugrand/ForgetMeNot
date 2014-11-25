@@ -3,6 +3,7 @@ var taskModule = angular.module('task',[]);
 taskModule.controller("AddTaskController", function ($scope, userService, databaseService) {
 
     $scope.task = new Task();
+    $scope.contexts = userService.loadUserContexts();
 
     $scope.saveTask = function() {
 

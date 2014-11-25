@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 
-var User = function(username, email, geolocalization, language) {
+var User = function(user_id, username, email, geolocalization, language) {
+    this.user_id = user_id || null;
     this.username = username;
     this.email = email;
     this.geolocalization = geolocalization;
@@ -26,9 +27,14 @@ var Task = function (task_id, name, owner, description, context, duration,
     this.lastModification = lastModification || '';  
 };
 
-var Context = function(name, owner, location) {
+var Context = function(context_id, name, owner, location) {
+    this.context_id = context_id || null;
     this.name = name || '';
     this.owner = owner || '';
     this.location = location || '';
 };
 
+var Language = function(language_id, name) {
+    this.language_id = language_id || null;
+    this.name = name || '';
+};
