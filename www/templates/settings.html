@@ -15,9 +15,9 @@ and open the template in the editor.
             </label>
 
             <div class="item item-toggle">
-                Géolocalisation
+                Geolocation
                 <label class="toggle toggle-dark">
-                    <input type="checkbox" ng-checked="{{user.geolocalization}}">
+                    <input type="checkbox" ng-checked="{{user.geolocation}}">
                     <div class="track">
                         <div class="handle"></div>
                     </div>
@@ -28,8 +28,8 @@ and open the template in the editor.
                 <div class="input-label">
                     Language
                 </div>
-                <select id="language-select" ng-model="user.language"
-                        ng-options="language for language in languages">
+                <select id="language-select" ng-model="selectedLanguage"
+                        ng-options="language.name for language in languages">
                 </select>
             </label>
         </div>

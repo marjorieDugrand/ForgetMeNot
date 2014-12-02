@@ -34,7 +34,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
     
     $scope.saveContext = function() {
 
-        $scope.context.owner = userService.loadUser().username;
+        $scope.context.owner = userService.loadUser().user_id;
         //$scope.context.lastModification = Date.now();
 	databaseService.storeContext($scope.context); 
     };

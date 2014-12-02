@@ -4,21 +4,21 @@
  * and open the template in the editor.
  */
 
-var User = function(user_id, username, email, geolocalization, language) {
-    this.user_id = user_id || null;
+var User = function(username, email, geolocation, language_id, user_id) {
+    this.user_id = user_id;
     this.username = username;
     this.email = email;
-    this.geolocalization = geolocalization;
-    this.language = language;
+    this.geolocation = geolocation;
+    this.language_id = language_id;
 };
 
-var Task = function (task_id, name, owner, description, context, duration,
-                     priority, label, progression, dueDate, lastModification) {
+var Task = function (name, owner_id, description, context_id, duration,
+                     priority, label, progression, dueDate, lastModification, task_id) {
     this.task_id = task_id || null;
     this.name = name || '';
-    this.owner = owner || '';
+    this.owner_id = owner_id || '';
     this.description = description || '';
-    this.context = context || '';
+    this.context_id = context_id || '';
     this.duration = duration || 0;
     this.priority = priority || 0;
     this.label = label || '';
@@ -27,14 +27,14 @@ var Task = function (task_id, name, owner, description, context, duration,
     this.lastModification = lastModification || '';  
 };
 
-var Context = function(context_id, name, owner, location) {
+var Context = function(name, owner_id, location, context_id) {
     this.context_id = context_id || null;
     this.name = name || '';
-    this.owner = owner || '';
+    this.owner_id = owner_id || '';
     this.location = location || '';
 };
 
-var Language = function(language_id, name) {
+var Language = function(name, language_id) {
     this.language_id = language_id || null;
     this.name = name || '';
 };
