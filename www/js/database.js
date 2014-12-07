@@ -192,8 +192,8 @@ fmnApp.service("databaseService", function($q) {
                 cursor.continue();
             } else {
                 console.log("Cannot recover more records");
-            };
-            recordsPromise.resolve(records);
+                recordsPromise.resolve(records);
+            };          
         };
         return recordsPromise.promise;
     };
