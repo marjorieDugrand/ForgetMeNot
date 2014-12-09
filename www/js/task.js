@@ -4,7 +4,7 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
     $scope.contexts = userService.loadUserContexts();
 
     $scope.saveTask = function() {
-
+        console.log("Save task");
         $scope.task.owner_id = userService.loadUser().user_id;
         $scope.task.lastModification = Date.now();
         $scope.task.context_id = $scope.task.context_id.context_id;
