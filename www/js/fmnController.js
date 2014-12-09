@@ -14,7 +14,6 @@ fmnApp.service('userService', function(databaseService, $q) {
         } else {   
             this.initialized = true;
             databaseService.initDB().then(function() {
-                console.log("prout");
                 appLanguages = databaseService.getLanguages();
                 databaseService.getUser('Rajon').then(function(result) {
                     appUser = result;
@@ -30,11 +29,13 @@ fmnApp.service('userService', function(databaseService, $q) {
     this.loadLanguages = function () {
         return appLanguages;
     };
+
     this.loadUserContexts = function() {
         if(appUser !== null) {
             return databaseService.getUserContexts(appUser.user_id);
         }
     };
+    
 });
 
 fmnApp.controller('fmnController',function($scope, $state, userService, databaseService) {

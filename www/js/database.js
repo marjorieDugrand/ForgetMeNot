@@ -149,16 +149,16 @@ fmnApp.service("databaseService", function($q) {
     
     this.getUserContexts = function(user_id) {
         var contexts = [];
-        getRecordsWithCondition(['contexts'], 'contexts', user_id).then(function(result) {
+        getRecordsWithOwnerCondition(['contexts'], 'contexts', user_id).then(function(result) {
             for(var c=0; c < result.length; c++) {
-                contexts.push(new Context(result[l].context_id, result[l].name,
-                                          result[l].owner, result[l].location));
+                contexts.push(new Context(result[c].name, result[c].owner_id,
+                                          result[c].location, result[c].context_id));
             }
         });
         return contexts;
     };
     
-    var getRecordsWithCondition = function(transactionO, store, condition) {
+    var getRecordsWithOwnerCondition = function(transactionO, store, ownerCondition) {
         var recordsPromise = $q.defer();
         var records = [];
         var objectStore = fmnDB.transaction(transactionO, 'readonly').objectStore(store);
@@ -167,14 +167,14 @@ fmnApp.service("databaseService", function($q) {
             var cursor = evt.target.result;
             if (cursor) {
                 var record = cursor.value;
-                if(record.owner === condition) {
+                if(record.owner_id === ownerCondition) {
                     records.push(record);
                 }
                 cursor.continue();
             } else {
                 console.log("Cannot recover more records");
+                recordsPromise.resolve(records);
             };
-            recordsPromise.resolve(records);
         };
         return recordsPromise.promise;
     };
@@ -215,7 +215,17 @@ fmnApp.service("databaseService", function($q) {
     
     this.storeTask = function(task) {
         var key;
-        storeContent(['tasks'], "tasks", task).then(function(result) {
+        storeContent(['tasks'], "tasks", {name : task.name,
+                                          owner_id : task.owner_id,
+                                          description : task.description,
+                                          context_id : task.context_id,
+                                          duration : task.duration,
+                                          priority : task.priority,
+                                          label : task.label,
+                                          progression : task.progression,
+                                          dueDate : task.dueDate,
+                                          lastModification : task.lastModification})
+          .then(function(result) {
             console.log("task " + task.name + " successfully added");
             key = result;
         });

@@ -1,14 +1,13 @@
-var taskModule = angular.module('task',[]);
-
-taskModule.controller("AddTaskController", function ($scope, userService, databaseService) {
+fmnApp.controller("AddTaskController", function ($scope, userService, databaseService) {
 
     $scope.task = new Task();
     $scope.contexts = userService.loadUserContexts();
 
     $scope.saveTask = function() {
 
-        $scope.task.owner = userService.loadUser().username;
+        $scope.task.owner_id = userService.loadUser().user_id;
         $scope.task.lastModification = Date.now();
+        $scope.task.context_id = $scope.task.context_id.context_id;
 	databaseService.storeTask($scope.task); 
     };
 
@@ -23,7 +22,7 @@ taskModule.controller("AddTaskController", function ($scope, userService, databa
     };
 });
 
-taskModule.controller("TaskListsController", function($scope, databaseService) {
+fmnApp.controller("TaskListsController", function($scope, databaseService) {
     $scope.tasks;
     $scope.show = false;
     $scope.list ="";
@@ -44,6 +43,6 @@ taskModule.controller("TaskListsController", function($scope, databaseService) {
         };
 });
 
-taskModule.controller("TaskDetailsController", function($scope, $stateParams, databaseService) {
+fmnApp.controller("TaskDetailsController", function($scope, $stateParams, databaseService) {
     $scope.task = databaseService.getTask(parseInt($stateParams.taskId));
 });
