@@ -14,24 +14,25 @@
     </head>
 
     <body ng-app="forget-me-not" ng-controller="fmnController">
-  
-        <ion-nav-view animation="slide-left-right"></ion-nav-view>
-       <!-- 
-        <header ng-hide="isWelcomePage()" id="user-header" class="bar bar-header bar-energized">
-            <img id="logo" src="img/logo_small.jpg"/>
-            <h1 id="username" class="title"> {{user.username}} </h1>
-            <a class="button icon-left ion-home" href ng-href="#/"/>
-            <a class="button icon ion-gear-a" href ng-href="#/settings"/>
-        </header>
- -->
+
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+    <!-- 
+     <header ng-hide="isWelcomePage()" id="user-header" class="bar bar-header bar-energized">
+         <img id="logo" src="img/logo_small.jpg"/>
+         <h1 id="username" class="title"> {{user.username}} </h1>
+         <a class="button icon-left ion-home" href ng-href="#/"/>
+         <a class="button icon ion-gear-a" href ng-href="#/settings"/>
+     </header>
+    -->
 
     <header ng-hide="isWelcomePage()" id="user-header" class="bar bar-header bar-energized item-button-left item-button-right">
         <a class="button button-clear icon-left ion-home" ng-href="#/"></a>
         <img id="logo" ng-src="img/logo_small.jpg" alt="forget-me-not"/>
         <h1 id="username" class="title"> {{user.username}} </h1>
         <div class="buttons">
-            <button class="button button-clear">
-                <i ng-show="user.geolocation" class="icon ion-earth"></i>
+            
+            <button class="button button-clear" ng-if="user.geolocation">
+                <i class="icon ion-earth"></i>
             </button>
             <button class="button button-clear">
                 <i class='icon ion-chatbox-working'></i>
@@ -39,6 +40,13 @@
         </div>
     </header>
 
+    <div class="bar bar-footer bar-dark padding" ng-if="showContextFooter">
+        <div>Your context has been saved.</div>
+    </div>
+
+    <div class="bar bar-footer bar-dark padding" ng-if="footer.showTaskFooter">
+        <div>Your task has been saved.</div>
+    </div>
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -47,14 +55,16 @@
     <script src="js/types.js"></script>
     <script src="js/app.js"></script>
     <script src="js/database.js"></script>
-    
+
     <script src="js/fmnController.js"></script>
     <script src="js/contexts.js"></script>
     <script src="js/task.js"></script>
-    
-    
-    
 
+    <!-- Google Maps script -->
+    <!--<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4Kuw3gbNuqIV5xpDH-tlOmeKdkERcWTg">
+    </script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>

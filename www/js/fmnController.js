@@ -62,6 +62,9 @@ fmnApp.controller('fmnController',function($scope, $state, userService, database
          };
     });
    
+   $scope.saveSettings = function() {
+       console.log("Save settings");
+   }
 });
 
 

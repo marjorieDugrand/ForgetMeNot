@@ -4,9 +4,17 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<ion-view title="Paramètres" ng-app="forget-me-not">      
+<ion-view title="Settings" ng-app="forget-me-not">      
 
     <ion-content class="has-header padding">
+
+        <div class="button-bar">
+            <a id="save" class="button button-stable icon ion-checkmark-round"
+               onclick="saveSettings()"></a>
+            <a id="cancel" class="button button-assertive icon ion-close-round"
+                    ng-href="#/"></a>
+        </div>
+
         <div class="list">
             <label class="item item-input">
                 <span class="input-label">Username</span>
