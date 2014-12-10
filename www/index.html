@@ -31,7 +31,7 @@
         <h1 id="username" class="title"> {{user.username}} </h1>
         <div class="buttons">
             <button class="button button-clear">
-                <i class="icon ion-earth"></i>
+                <i ng-show="user.geolocation" class="icon ion-earth"></i>
             </button>
             <button class="button button-clear">
                 <i class='icon ion-chatbox-working'></i>
