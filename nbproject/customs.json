@@ -2,7 +2,12 @@
     "elements": {
         "div": {
             "attributes": {
+                "ng-show": {},
+                "ui-map": {},
+                "ui-options": {},
                 "id": {},
+                "ng-app": {},
+                "ng-if": {},
                 "class": {}
             }
         },
@@ -13,9 +18,16 @@
             }
         },
         "ion-header-bar": {},
+        "ui-gmap-google-map": {
+            "attributes": {
+                "zoom": {}
+            }
+        },
+        "marker": {},
         "ion-content": {
             "attributes": {
                 "padding": {},
+                "ng-class": {},
                 "has-header": {},
                 "class": {}
             }
@@ -35,6 +47,7 @@
         }
     },
     "attributes": {
+        "center": {},
         "title": {}
     }
 }

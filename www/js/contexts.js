@@ -5,62 +5,75 @@
  */
 
 fmnApp.controller("ContextController", function ($scope, userService, databaseService) {
-    
+
     $scope.context = new Context();
-    
+
     $scope.useAddress = false;
     $scope.useGeolocation = false;
-    
-    $scope.addressChoiceChange = function() {
+
+    $scope.addressChoiceChange = function () {
         $scope.useAddress = !($scope.useAddress);
         $scope.useGeolocation = false;
     };
-    
-    $scope.geolocationChoiceChange = function() {
+
+    $scope.geolocationChoiceChange = function () {
         $scope.useGeolocation = !($scope.useGeolocation);
         $scope.useAddress = false;
-        if($scope.useGeolocation) {
+        if ($scope.useGeolocation) {
             $scope.checkGeolocation();
         }
     };
-    
-    $scope.addressUsed = function() {
+
+    $scope.addressUsed = function () {
         return $scope.useAddress && !($scope.useGeolocation);
     };
-    
-    $scope.geolocationUsed = function() {
+
+    $scope.geolocationUsed = function () {
         return !($scope.useAddress) && $scope.useGeolocation;
     };
-    
-    $scope.saveContext = function() {
+
+    $scope.saveContext = function () {
 
         $scope.context.owner_id = userService.loadUser().user_id;
         //$scope.context.lastModification = Date.now();
-	databaseService.storeContext($scope.context); 
+        databaseService.storeContext($scope.context);
     };
 
-    $scope.cancelContext = function() {
-	$scope.context = new Context();
+    $scope.cancelContext = function () {
+        $scope.context = new Context();
     };
-    
+
     $scope.geolocationMessage = '';
-    
-    $scope.checkGeolocation = function() {
-      if(userService.loadUser().geolocalization) {
-         /* ANAIS TODO
-          *  if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition($scope.context.location);
-              $scope.geolocationMessage = 'Your location: ' + $scope.context.location;
-          } else {
-              $scope.geolocationMessage = "Geolocation is not supported by this browser.";
-          }*/
-      } else {
-          $scope.geolocationMessage = "Please modify your settings to accept geolocation.";
-      }  
+
+    $scope.checkGeolocation = function () {
+        if (userService.loadUser().geolocalization) {
+            if (navigator.geolocation) {
+                console.log("geolocation supported");
+                navigator.geolocation.getCurrentPosition(function (pos) {
+                    var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                    var mapOptions = {
+                        center: latlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                    var marker = new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        title: 'Your location'
+                    });
+                });
+            }
+            else {
+                $scope.geolocationMessage = "Geolocation is not supported by this browser.";
+            }
+        } else {
+            $scope.geolocationMessage = "Please modify your settings to accept geolocation.";
+        }
     };
-    
-    $scope.getGeolocationMessage = function() {
+
+    $scope.getGeolocationMessage = function () {
         return $scope.geolocationMessage;
     };
- 
+
 });

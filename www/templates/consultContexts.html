@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ion-view title="Consult contexts" ng-app="task">
+    <ion-content class="has-header padding">
+        <div class="list" ng-repeat="context in contexts">
+            <a class="item" ng-href="#/contexts/{{context.context_id}}">
+                {{context.name}}
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

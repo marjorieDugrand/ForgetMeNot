@@ -7,42 +7,24 @@
 var fmnApp = angular.module('forget-me-not', ['ionic']);
 
 fmnApp.controller('popupController', function ($scope, $ionicPopup) {
-            $scope.showConfirm = function () {
-                //TODO? afficher le nom de la tâche prête à être supprimée
-                var confirmPopup = $ionicPopup.confirm({
-                    title: 'Supprimer une tâche',
-                    template: 'Etes-vous sûr de vouloir supprimer cette tâche ?'
-                });
-                confirmPopup.then(function (res) {
-                    if (res) {
-                        console.log('You are sure');
-                        //TODO: supprimer la tâche, afficher un message de confirmation
-                    }
-                    else {
-                        console.log('You are not sure');
-                    }
-                });
-            };
-        })
-/*
-        .controller('mapController', function ($scope) {
-            $scope.showPosition = function (position) {
-                var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
-                $scope.model.map.setCenter(latlng);
-            };
+    $scope.showConfirm = function () {
+        //TODO? afficher le nom de la tâche prête à être supprimée
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Supprimer une tâche',
+            template: 'Etes-vous sûr de vouloir supprimer cette tâche ?'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                console.log('You are sure');
+                //TODO: supprimer la tâche, afficher un message de confirmation
+            }
+            else {
+                console.log('You are not sure');
+            }
+        });
+    };
+})
 
-            $scope.getLocation = function () {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition($scope.showPosition);
-                }
-                else {
-                    console.log("Geolocation is not supported by this browser.");
-                }
-            };
-
-            $scope.getLocation();
-        })
-*/
         .run(function ($ionicPlatform) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -84,12 +66,20 @@ fmnApp.controller('popupController', function ($scope, $ionicPopup) {
                     .state('settings', {
                         url: '/settings',
                         templateUrl: "templates/settings.html",
-                        controller:"fmnController"
+                        controller: "fmnController"
                     })
                     .state('tasks', {
                         url: '/lists',
                         templateUrl: "templates/tasksList.html"
-                        
+
+                    })
+                    .state('consult_contexts', {
+                        url: '/contexts',
+                        templateUrl: "templates/consultContexts.html"
+                    })
+                    .state('context_details', {
+                        url: '/contexts/:contextId',
+                        templateUrl: "templates/contextDetails.html"
                     });
             $urlRouterProvider.otherwise('/');
         });
