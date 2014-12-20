@@ -3,8 +3,11 @@
         "div": {
             "attributes": {
                 "ng-show": {},
+                "ng-class": {},
                 "ui-map": {},
                 "ui-options": {},
+                "icon": {},
+                "style": {},
                 "id": {},
                 "ng-app": {},
                 "ng-if": {},
@@ -17,13 +20,18 @@
                 "animation": {}
             }
         },
-        "ion-header-bar": {},
+        "ion-header-bar": {
+            "attributes": {
+                "class": {}
+            }
+        },
         "ui-gmap-google-map": {
             "attributes": {
                 "zoom": {}
             }
         },
         "marker": {},
+        "ion-modal-view": {},
         "ion-content": {
             "attributes": {
                 "padding": {},
@@ -47,6 +55,7 @@
         }
     },
     "attributes": {
+        "ng-click": {},
         "center": {},
         "title": {}
     }

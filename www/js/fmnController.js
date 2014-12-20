@@ -13,6 +13,9 @@ fmnApp.service('userService', function(databaseService, $q) {
             servicePromise.resolve();
         } else {   
             this.initialized = true;
+            /*databaseService.rmDB().then(function() {
+               console.log("RM DB"); 
+            });*/
             databaseService.initDB().then(function() {
                 appLanguages = databaseService.getLanguages();
                 databaseService.getUser('Rajon').then(function(result) {

@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 
-
-
 fmnApp.service("databaseService", function($q) {
     this.$q = $q;
     
@@ -16,7 +14,8 @@ fmnApp.service("databaseService", function($q) {
     this.initDB = function() {
         var dbPromise = $q.defer();
         createDB().then(function() {
-            if(!doesDBContainsUser) {
+            if(!doesDBContainsUser('Rajon')) {
+                console.log('ok');
                 addUser(new User('Rajon', 'rajon.rondo@gmail.com', true, 3)); 
             }
             dbPromise.resolve();
@@ -158,6 +157,117 @@ fmnApp.service("databaseService", function($q) {
         return contexts;
     };
     
+    this.getTasksByDueDate = function(dueDate) {
+        var recordsPromise = $q.defer();
+        var tasks = [];
+        getRecordsWithDateCondition(['tasks'], 'tasks', dueDate).then(function(result) {
+           for (var t=0; t < result.length; t++) {
+               //console.log(result[t].name);
+               tasks.push(new Task(result[t].name, result[t].owner_id, result[t].description,
+                                    result[t].context_id, result[t].duration, result[t].priority,
+                                    result[t].label, result[t].progression, result[t].dueDate,
+                                    result[t].lastModification, result[t].task_id));
+           } 
+           recordsPromise.resolve(tasks);
+        });
+        return recordsPromise.promise;
+        //return tasks;
+    };
+    
+    this.getTasksByContext = function(context) {
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(['tasks'], 'readonly').objectStore('tasks');
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                if(record.context_id === context) {
+                    records.push(record);
+                }
+                cursor.continue();
+            } else {
+                console.log("Cannot recover more records");
+                recordsPromise.resolve(records);
+            };
+        };
+        return recordsPromise.promise;
+    };
+    
+    this.getTasksByPriority = function(priority) {
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(['tasks'], 'readonly').objectStore('tasks');
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                if(record.priority === priority) {
+                    records.push(record);
+                }
+                cursor.continue();
+            } else {
+                console.log("Cannot recover more records");
+                recordsPromise.resolve(records);
+            };
+        };
+        return recordsPromise.promise;
+    };
+    
+    this.searchForKeyword = function(keyword) {
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(['tasks'], 'readonly').objectStore('tasks');
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                if(record.label === keyword) {
+                    records.push(record);
+                }
+                cursor.continue();
+            } else {
+                console.log("Cannot recover more records");
+                recordsPromise.resolve(records);
+            };
+        };
+        return recordsPromise.promise;
+    };
+    
+    var getRecordsWithDateCondition = function(transaction0, store, dateCondition) {
+        //var date = new Date(dateCondition);
+        var recordsPromise = $q.defer();
+        var records = [];
+        var objectStore = fmnDB.transaction(transaction0, 'readonly').objectStore(store);
+        var request = objectStore.openCursor();
+        request.onsuccess = function (evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                var record = cursor.value;
+                if (dateCondition !== "") {
+                    var dueDate = new Date(record.dueDate);
+                    //if(record.dueDate <= dateCondition) {
+                    if (dueDate <= dateCondition) {
+                        records.push(record);
+                    }
+                }
+                else {
+                    if (record.dueDate === "") {
+                        records.push(record);
+                    }
+                }
+                cursor.continue();
+            } else {
+                console.log("Cannot recover more records");
+                recordsPromise.resolve(records);
+            };
+        };
+        return recordsPromise.promise;
+    };
+    
     var getRecordsWithOwnerCondition = function(transactionO, store, ownerCondition) {
         var recordsPromise = $q.defer();
         var records = [];
@@ -254,6 +364,15 @@ fmnApp.service("databaseService", function($q) {
         });
    
         return task;
+    };
+    
+    this.getContext = function(contextId) {
+      var context;
+        getContentByKey(['contexts'], "contexts", contextId).then(function(result) {
+           context = new Context(result.name, result.owner_id, result.location, result.context_id); 
+        });
+        
+        return context;
     };
     
     var getContentByKey = function(transactionO, store, key) {

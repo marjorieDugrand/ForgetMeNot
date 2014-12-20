@@ -5,7 +5,7 @@
  */
 
 fmnApp.controller("ContextController", function ($scope, userService, databaseService) {
-
+    $scope.contexts = userService.loadUserContexts();
     $scope.context = new Context();
 
     $scope.useAddress = false;
@@ -46,7 +46,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
     $scope.geolocationMessage = '';
 
     $scope.checkGeolocation = function () {
-        if (userService.loadUser().geolocalization) {
+        if (userService.loadUser().geolocation) {
             if (navigator.geolocation) {
                 console.log("geolocation supported");
                 navigator.geolocation.getCurrentPosition(function (pos) {
@@ -76,4 +76,8 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         return $scope.geolocationMessage;
     };
 
+});
+
+fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService) {
+    $scope.context = databaseService.getContext(parseInt($stateParams.contextId));
 });

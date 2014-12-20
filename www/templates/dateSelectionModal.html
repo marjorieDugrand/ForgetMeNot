@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-energized">
+        <h1 class="title">Select a date</h1>
+        <button class="button button-clear button-primary" ng-click="dateModal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <label class="item item-input">
+                <span class="input-label">Due date</span>
+                <input type="date" placeholder="yyyy-MM-dd"
+                       ng-model="date.selectedDate">
+        </label>
+        <button class="button button-full button-energized" ng-click="toggleList(6)">Search tasks for this date</button>
+    </ion-content>
+</ion-modal-view>
