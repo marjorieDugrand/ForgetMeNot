@@ -46,13 +46,13 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
     $scope.geolocationMessage = '';
 
     $scope.checkGeolocation = function () {
-        if (userService.loadUser().geolocalization) {
+        if (userService.loadUser().geolocation) {
             if (navigator.geolocation) {
                 console.log("geolocation supported");
                 navigator.geolocation.getCurrentPosition(function (pos) {
-                    var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                    $scope.context.location = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                     var mapOptions = {
-                        center: latlng,
+                        center: $scope.context.location,
                         zoom: 16,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };

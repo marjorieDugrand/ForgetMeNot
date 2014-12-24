@@ -1,4 +1,4 @@
-fmnApp.controller("AddTaskController", function ($scope, userService, databaseService) {
+fmnApp.controller("AddTaskController", function ($scope, userService, databaseService, $location) {
 
     $scope.task = new Task();
     $scope.contexts = userService.loadUserContexts();
@@ -8,7 +8,12 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
         $scope.task.owner_id = userService.loadUser().user_id;
         $scope.task.lastModification = Date.now();
         $scope.task.context_id = $scope.task.context_id.context_id;
-	databaseService.storeTask($scope.task); 
+	databaseService.storeTask($scope.task).then(function(result) {
+            $scope.task.task_id = result;
+            var href = "/tasks/" + $scope.task.task_id;
+            console.log("key " + $scope.task.task_id);
+            $location.path(href);
+        });
     };
 
     $scope.cancelTask = function() {
@@ -44,5 +49,7 @@ fmnApp.controller("TaskListsController", function($scope, databaseService) {
 });
 
 fmnApp.controller("TaskDetailsController", function($scope, $stateParams, databaseService) {
-    $scope.task = databaseService.getTask(parseInt($stateParams.taskId));
+    //$scope.id = parseInt($stateParams.taskId);
+    $scope.task = databaseService.getTask($stateParams.taskId);
+    console.log("he ho");
 });

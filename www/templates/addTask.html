@@ -5,9 +5,9 @@
             <div id="task-block" ng-app="task">
 
                 <div class="button-bar">
-                    <button id="save" class="button icon ion-checkmark-round"
-                            ng-href="/tasks/{{task.id}}"
-                            ng-click="saveTask()"></button>
+                    <a id="save" class="button icon ion-checkmark-round"
+                            ng-click="saveTask()"
+                            ></a>
                     <button id="cancel" class="button button-assertive icon ion-close-round"
                             ng-click="cancelTask()"></button>
                 </div>

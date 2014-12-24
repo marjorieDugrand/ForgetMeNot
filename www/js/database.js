@@ -214,7 +214,7 @@ fmnApp.service("databaseService", function($q) {
     };
     
     this.storeTask = function(task) {
-        var key;
+        var keyPromise = $q.defer();
         storeContent(['tasks'], "tasks", {name : task.name,
                                           owner_id : task.owner_id,
                                           description : task.description,
@@ -227,9 +227,9 @@ fmnApp.service("databaseService", function($q) {
                                           lastModification : task.lastModification})
           .then(function(result) {
             console.log("task " + task.name + " successfully added");
-            key = result;
+            keyPromise.resolve(result);
         });
-        return key;
+        return keyPromise.promise;
     };
     
     this.storeContext = function(context) {
