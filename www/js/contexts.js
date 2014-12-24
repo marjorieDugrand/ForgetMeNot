@@ -5,7 +5,7 @@
  */
 
 fmnApp.controller("ContextController", function ($scope, userService, databaseService) {
-
+    $scope.contexts = userService.loadUserContexts();
     $scope.context = new Context();
 
     $scope.useAddress = false;
@@ -76,4 +76,8 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         return $scope.geolocationMessage;
     };
 
+});
+
+fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService) {
+    $scope.context = databaseService.getContext(parseInt($stateParams.contextId));
 });

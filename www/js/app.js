@@ -61,7 +61,7 @@ fmnApp.controller('popupController', function ($scope, $ionicPopup) {
                     .state('task_details', {
                         url: '/tasks/:taskId',
                         templateUrl: "templates/taskDetails.html",
-                        controller: 'TaskDetailsController'
+                        controller: 'TaskDetailsCTaskDetaiontroller'
                     })
                     .state('settings', {
                         url: '/settings',
@@ -75,11 +75,13 @@ fmnApp.controller('popupController', function ($scope, $ionicPopup) {
                     })
                     .state('consult_contexts', {
                         url: '/contexts',
-                        templateUrl: "templates/consultContexts.html"
+                        templateUrl: "templates/consultContexts.html",
+                        controller: 'ContextController'
                     })
                     .state('context_details', {
                         url: '/contexts/:contextId',
-                        templateUrl: "templates/contextDetails.html"
+                        templateUrl: "templates/contextDetails.html",
+                        controller: "ContextDetailsController"
                     });
             $urlRouterProvider.otherwise('/');
         });

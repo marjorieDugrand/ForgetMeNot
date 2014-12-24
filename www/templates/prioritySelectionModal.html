@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-energized">
+        <h1 class="title">Select a priority</h1>
+        <button class="button button-clear button-primary" ng-click="priorityModal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <label class="item item-input item-select">
+            <span class="input-label">Priority</span>
+            <select id="context-select" ng-model="priority.selectedPriority" ng-options="priority.name for priority in priorities">
+                <option id="default" value="" selected >
+                    -- choose a priority --
+                </option>
+            </select>
+        </label>
+        <button class="button button-full button-energized" ng-click="getTasksByPriority()">Search tasks for this priority</button>
+    </ion-content>
+</ion-modal-view>

@@ -5,20 +5,20 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 
-<ion-view title="Context Details" ng-app="forget-me-not">      
+<ion-view title="Context Details">      
     <ion-content class="has-header padding">
         <div class="card">
                 {{context.name}}                
-                <ul class="list">
-                    <li class="item">
+                <!--<ul class="list">-->
+                    <div class="item">
                         <span>Location</span>
                         <div class="item" id="map-canvas" style="width:100%;height:380px;" ng-show="geolocationUsed"></div>
                         <div class="item" ng-show="addressUsed"> 
                             <span>Address</span>
                             {{context.location}}
                         </div>
-                    </li>   
-                </ul>
+                    </div>   
+               <!-- </ul>-->
         </div>
     </ion-content>
 </ion-view>

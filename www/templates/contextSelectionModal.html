@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-energized">
+        <h1 class="title">Select a context</h1>
+        <button class="button button-clear button-primary" ng-click="contextModal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <label class="item item-input item-select">
+            <span class="input-label">Context</span>
+            <select id="context-select" ng-model="context.selectedContext" ng-options="context.name for context in contexts">
+                <option id="default" value="" selected >
+                    -- choose a context --
+                </option>
+            </select>
+        </label>
+        <button class="button button-full button-energized" ng-click="getTasksByContext()">Search tasks for this context</button>
+    </ion-content>
+</ion-modal-view>

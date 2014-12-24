@@ -6,18 +6,17 @@
 
                 <div class="button-bar">
                     <a id="save" class="button icon ion-checkmark-round"
-                            ng-click="saveTask()"
-                            ></a>
-                    <button id="cancel" class="button button-assertive icon ion-close-round"
-                            ng-click="cancelTask()"></button>
+                            ng-click="saveTask()"></a>
+                    <a id="cancel" class="button button-assertive icon ion-close-round"
+                            ng-click="cancelTask()" ng-href="#/"></a>
                 </div>
 
                 <div class="list" id="task-details">
                     <form class="simple-form" novalidate>
                         <label class="item item-input">
-                            <span class="input-label">Nom</span>
+                            <span class="input-label">Task Name</span>
                             <input id="name" type="text" class="form-control"
-                                   placeholder="Nom"
+                                   placeholder="Task Name"
                                    ng-model="task.name" required/>
                         </label>
                         <label class="item item-input">
@@ -27,28 +26,28 @@
                                    ng-model="task.description" required/>
                         </label>
                         <label class="item item-input item-select">
-                            <span class="input-label">Contexte</span>
+                            <span class="input-label">Context</span>
                             <select id="context-select"
                                     ng-model="task.context_id" ng-options="context.name for context in contexts">
                                 <option id="default" value="" selected>
-                                    -- choisissez un contexte --
+                                    -- choose a context --
                                 </option>
                             </select>
                         </label>
                         <label class="item item-input">
-                            <span class="input-label">Date d'échéance</span>
+                            <span class="input-label">Due Date</span>
                             <input id="due-date" type="date" class="form-control"
-                                   placeholder="aaaa-MM-jj"
+                                   placeholder="yyyy-MM-dd"
                                    ng-model="task.dueDate"/>
                         </label>
                         <label class="item item-input">
-                            <span class="input-label">Durée (en minutes)</span>
+                            <span class="input-label">Duration (in minutes)</span>
                             <input id="duration" type="number" min="0" class="form-control"
-                                   placeholder="Durée"
+                                   placeholder="Duration"
                                    ng-model="task.duration"/>
                         </label>
                         <label class="item item-input">
-                            <span class="input-label">Priorité</span>
+                            <span class="input-label">Priority</span>
                             <input id="priority" type="hidden" ng-model="task.priority"/>
                             <div class="range">
                                 <i class="icon ion-ios7-star-outline"></i>

@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/task.js</file>
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/database.js</file>
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/home.html</file>
@@ -20,6 +21,15 @@
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/settings.html</file>
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/addTask.html</file>
             <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/config.xml</file>
+=======
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/types.js</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/consultTasks.html</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/task.js</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/addTask.html</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/contextSelectionModal.html</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/database.js</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/prioritySelectionModal.html</file>
+>>>>>>> 0d9b4798676538b499a2cc798998e6c63fc6d013
         </group>
     </open-files>
 </project-private>
