@@ -216,7 +216,7 @@ fmnApp.service("databaseService", function($q) {
         return recordsPromise.promise;
     };
     
-    this.searchForKeyword = function(keyword) {
+    this.getTaskByKeyword = function(keyword) {
         var recordsPromise = $q.defer();
         var records = [];
         var objectStore = fmnDB.transaction(['tasks'], 'readonly').objectStore('tasks');
@@ -235,6 +235,25 @@ fmnApp.service("databaseService", function($q) {
             };
         };
         return recordsPromise.promise;
+    };
+    
+    this.removeTask = function(array, task) {
+        var recordsPromise = $q.defer();
+      var objectStore = fmnDB.transaction(['tasks'], 'readwrite').objectStore('tasks');
+      var request = objectStore.delete(task);
+      request.onsuccess = function() {
+            arrayUnset(array, task);
+            console.log("The task has been removed"); 
+            recordsPromise.resolve(array);
+      };
+      return recordsPromise.promise;
+    };
+    
+    var arrayUnset = function(array, val) {
+      var index = array.indexOf(val);
+      if (index > -1) {
+          array.splice(index, 1);
+      }
     };
     
     var getRecordsWithDateCondition = function(transaction0, store, dateCondition) {

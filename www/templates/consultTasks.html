@@ -20,7 +20,7 @@ and open the template in the editor.
                 <label class="item-input-wrapper">
                     <i class="icon ion-ios7-search-strong placeholder-icon"></i>
                     <input type="search" placeholder="Enter keywords" ng-model="keyword" ng-change="search()">
-                    </label>
+                </label>
             </div>
         </div>
     </div>   
@@ -35,9 +35,9 @@ and open the template in the editor.
                     <button class="button button-clear button-dark" ng-href="#">
                         <i class="icon ion-edit"></i>
                     </button>
-                    <button class="button button-clear button-dark">
+                    <a class="button button-clear button-dark" ng-click="deleteTask({{task}})">
                         <i class="icon ion-trash-a"></i>
-                    </button>    
+                    </a>    
                 </div>
             </ion-item>   
 

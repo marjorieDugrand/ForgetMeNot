@@ -259,7 +259,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         $scope.show = 7;
         
         console.log("keyword: " + $scope.keyword);
-        databaseService.searchForKeyword($scope.keyword).then(function (result) {
+        databaseService.getTaskByKeyword($scope.keyword).then(function (result) {
             $scope.tasks = result;
             console.log("length: " + $scope.tasks.length);
             console.log("tasks: ");
@@ -302,6 +302,19 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         });
     };
 
+    $scope.deleteTask = function(task) {
+        databaseService.removeTask($scope.tasks, task).then(function(result) {
+            $scope.tasks = result;
+            console.log("length: " + $scope.tasks.length);
+            console.log("tasks: ");
+             for (var i = 0; i < $scope.tasks.length; i++) {
+             console.log($scope.tasks[i].name);
+             }
+        });
+
+        //arrayUnset($scope.tasks, task);
+    };
+    
     var getMonthInProperFormat = function (month) {
         if (month < 10) {
             month = "0" + month;
