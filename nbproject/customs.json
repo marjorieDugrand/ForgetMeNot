@@ -32,6 +32,11 @@
         },
         "marker": {},
         "ion-modal-view": {},
+        "tasks-list": {
+            "attributes": {
+                "ng-show": {}
+            }
+        },
         "ion-content": {
             "attributes": {
                 "padding": {},

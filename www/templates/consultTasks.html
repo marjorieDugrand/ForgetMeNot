@@ -19,7 +19,7 @@ and open the template in the editor.
             <div class="item-input-inset">
                 <label class="item-input-wrapper">
                     <i class="icon ion-ios7-search-strong placeholder-icon"></i>
-                    <input type="search" placeholder="Enter keywords" ng-model="keyword" ng-change="search()">
+                    <input type="search" placeholder="Enter keywords" ng-model="keyword" ng-change="searchByKeyword()">
                 </label>
             </div>
         </div>
@@ -27,152 +27,56 @@ and open the template in the editor.
 
     <ion-content class="has-header has-tabs-top padding">     
         <div class="list">
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(7)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <a class="button button-clear button-dark" ng-click="deleteTask({{task}})">
-                        <i class="icon ion-trash-a"></i>
-                    </a>    
-                </div>
-            </ion-item>   
+            <tasks-list ng-show="isListShown(7)"></tasks-list> 
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(0)" ng-class="{active: isListShown(0)}">
                 <i class="icon ion-ios7-sunny"></i>
                 Today
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(0)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>          
+            <tasks-list ng-show="isListShown(0)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(1)" ng-class="{active: isListShown(1)}">
                 <i class="icon ion-ios7-cloudy-night"></i>
                 Tonight
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(1)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>
+            <tasks-list ng-show="isListShown(1)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(2)" ng-class="{active: isListShown(1)}">
                 <i class="icon ion-ios7-partlysunny"></i>
                 Tomorrow
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(2)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>  
+            <tasks-list ng-show="isListShown(2)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(3)" ng-class="{active: isListShown(3)}">
                 <i class="icon ion-ios7-cloudy"></i>
                 Within the next 7 days
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(3)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>  
+            <tasks-list ng-show="isListShown(3)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(4)" ng-class="{active: isListShown(4)}">
                 <i class="icon ion-ios7-thunderstorm"></i>
                 Within the next 30 days
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(4)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>  
-
+            <tasks-list ng-show="isListShown(4)"></tasks-list>
+ 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(5)" ng-class="{active: isListShown(5)}">
                 <i class="icon ion-ios7-moon"></i>
                 Someday
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(5)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>  
+            <tasks-list ng-show="isListShown(5)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
                       ng-click="dateModal.show()" ng-class="{active: isListShown(6)}">
                 <i class="icon ion-ios7-bell"></i>
                 For a specific date
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(6)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
-                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
-                </div>
-                {{task.name}}
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </ion-item>  
+            <tasks-list ng-show="isListShown(6)"></tasks-list>
         </div>
     </ion-content>
 </ion-view>   

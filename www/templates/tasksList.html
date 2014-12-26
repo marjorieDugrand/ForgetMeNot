@@ -4,57 +4,16 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<ion-view title="Tâches" ng-app="forget-me-not">
-    <ion-content class="has-header padding">
-        <ion-list>            
-            <a class="item item-icon-left item-button-right">
-                <i class="icon ion-ios7-star"></i>
-                Faire un gâteau
-                <div class="buttons">
-                    <button class="button button-clear button-dark" ng-href="#">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </a>
-            <a class="item item-icon-left item-button-right">
-                <i class="icon ion-ios7-star"></i>
-                Relire mes leçons
-                <div class="buttons">
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </a>
-            <a class="item item-icon-left item-button-right">
-                <i class="icon ion-ios7-star"></i>
-                Aller au cinéma
-                <div class="buttons">
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </a>
-            <a class="item item-icon-left item-button-right">
-                <i class="icon ion-ios7-star"></i>
-                Prendre un bain !
-                <div class="buttons">
-                    <button class="button button-clear button-dark">
-                        <i class="icon ion-edit"></i>
-                    </button>
-                    <button class="button button-clear button-dark" ng-controller="popupController" ng-click="showConfirm()">
-                        <i class="icon ion-trash-a"></i>
-                    </button>    
-                </div>
-            </a>
-        </ion-list>
-    </ion-content>
-</ion-view>
+<ion-item class="item-accordion item-icon-left item-button-right" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+    <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
+    </div>
+    {{task.name}}
+    <div class="buttons">
+        <button class="button button-clear button-dark" ng-href="#">
+            <i class="icon ion-edit"></i>
+        </button>
+        <a class="button button-clear button-dark" ng-click="removeTask({{task}})">
+            <i class="icon ion-trash-a"></i>
+        </a>    
+    </div>
+</ion-item>  

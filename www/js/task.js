@@ -8,7 +8,7 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
         $scope.task.owner_id = userService.loadUser().user_id;
         $scope.task.lastModification = Date.now();
         $scope.task.context_id = $scope.task.context_id.context_id;
-	databaseService.storeTask($scope.task).then(function(result) {
+        databaseService.storeTask($scope.task).then(function (result) {
             $scope.task.task_id = result;
             $location.path("/tasks/" + $scope.task.task_id);
         });
@@ -40,11 +40,29 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
     // 6: for a specific date
     // 7: by context/by keyword/by priority
     $scope.show = null;
+    
+    /* Déclarations des fenêtres modales */
+    
+    $ionicModal.fromTemplateUrl('templates/dateSelectionModal.html', {
+        scope: $scope
+    }).then(function (dateModal) {
+        $scope.dateModal = dateModal;
+        $scope.date = {selectedDate: ""};
+    });
 
-    $scope.toggleContexts = function () {
-        $scope.contexts = databaseService.getUserContexts($scope.user.user_id);
-    };
+    $ionicModal.fromTemplateUrl('templates/contextSelectionModal.html', {
+        scope: $scope
+    }).then(function (contextModal) {
+        $scope.contextModal = contextModal;
+    });
 
+    $ionicModal.fromTemplateUrl('templates/prioritySelectionModal.html', {
+        scope: $scope
+    }).then(function (priorityModal) {
+        $scope.priorityModal = priorityModal;
+    });
+
+    /* Affichage des tâches par date d'échéance */
     $scope.toggleList = function (condition) {
         // On réinitialise les taches
         $scope.tasks = [];
@@ -185,7 +203,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
             default:
                 console.log("Unknown condition");
         }
-        databaseService.getTasksByDueDate(date).then(function (result) {
+        databaseService.getTasksByCondition("dueDate", date).then(function (result) {
             console.log(result);
             $scope.tasks = result;
             console.log("length: " + $scope.tasks.length);
@@ -195,10 +213,81 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         });
     };
 
+    /* Renvoie vrai si la liste actuellement affichée est celle passée en paramètre, faux sinon */ 
     $scope.isListShown = function (list) {
         return $scope.show === list;
     };
 
+    /* Affichage de la fenêtre modale pour les contextes */
+    $scope.showContextsModal = function () {
+        $scope.contextModal.show();
+        $scope.contexts = $scope.$parent.contexts;
+        $scope.context = {selectedContext: ""};
+    };
+
+    /* Affichage de la fenêtre modale pour les priorités */
+    $scope.showPrioritiesModal = function () {
+        $scope.priorityModal.show();
+        $scope.priority = {selectedPriority: ""};
+        // Associe une valeur à chaque priorité
+        $scope.priorities = [{"name": "No priority", "value": "0"},
+            {"name": "Low priority", "value": "1"},
+            {"name": "Medium priority", "value": "2"},
+            {"name": "High priority", "value": "3"}];
+    };
+
+    /* Affichage des tâches par mot-clé */
+    $scope.searchByKeyword = function () {
+        // On affiche le bon groupe 
+        $scope.show = 7;
+
+        console.log("keyword: " + $scope.keyword);
+        databaseService.getTasksByCondition("keyword", $scope.keyword).then(function (result) {
+            $scope.tasks = result;
+            console.log("length: " + $scope.tasks.length);
+            console.log("tasks: ");
+            for (var i = 0; i < $scope.tasks.length; i++) {
+                console.log($scope.tasks[i].name);
+            }
+        });
+    };
+
+    /* Affichage des tâches par contexte */
+    $scope.getTasksByContext = function () {
+        $scope.contextModal.hide();
+
+        // On affiche le bon groupe 
+        $scope.show = 7;
+
+        databaseService.getTasksByCondition("context", $scope.context.selectedContext.context_id).then(function (result) {
+            $scope.tasks = result;
+            console.log("length: " + $scope.tasks.length);
+            /*console.log("tasks: ");
+             for (var i = 0; i < $scope.tasks.length; i++) {
+             console.log($scope.tasks[i].name);
+             }*/
+        });
+    };
+
+    /* Affichage des tâches par priorité */
+    $scope.getTasksByPriority = function () {
+        $scope.priorityModal.hide();
+        // On affiche le bon groupe 
+        $scope.show = 7;
+
+        console.log("selected priority: " + $scope.priority.selectedPriority.value);
+        databaseService.getTasksByCondition("priority", $scope.priority.selectedPriority.value).then(function (result) {
+            console.log(result);
+            $scope.tasks = result;
+            console.log("length: " + $scope.tasks.length);
+            /*console.log("tasks: ");
+             for (var i = 0; i < $scope.tasks.length; i++) {
+             console.log($scope.tasks[i].name);
+             }*/
+        });
+    };
+    
+    /* Renvoie la couleur associée à la priorité de la tâche */
     $scope.getPriorityClass = function (priority) {
         var color;
 
@@ -218,106 +307,41 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         return color;
     };
 
-    $scope.searchByKeyword = function () {
-        $scope.showSearchBar = true;
-    }
-
-    $ionicModal.fromTemplateUrl('templates/dateSelectionModal.html', {
-        scope: $scope
-    }).then(function (dateModal) {
-        $scope.dateModal = dateModal;
-        $scope.date = {selectedDate: ""};
-    });
-
-    $ionicModal.fromTemplateUrl('templates/contextSelectionModal.html', {
-        scope: $scope
-    }).then(function (contextModal) {
-        $scope.contextModal = contextModal;
-    });
-
-    $ionicModal.fromTemplateUrl('templates/prioritySelectionModal.html', {
-        scope: $scope
-    }).then(function (priorityModal) {
-        $scope.priorityModal = priorityModal;
-    });
-
-    $scope.showContextsModal = function () {
-        $scope.contextModal.show();
-        $scope.contexts = $scope.$parent.contexts;
-        $scope.context = {selectedContext: ""};
+    /* Supprime une tâche (de la BD + met à jour l'affichage) */
+    $scope.removeTask = function (task) {
+        databaseService.removeTaskFromDB(task.task_id);
+        arrayUnset($scope.tasks, task.task_id);
+        console.log("length: " + $scope.tasks.length);
+        /*console.log("tasks: ");
+         for (var i = 0; i < $scope.tasks.length; i++) {
+         console.log($scope.tasks[i].name);
+         }*/
     };
 
-    $scope.showPrioritiesModal = function () {
-        $scope.priorityModal.show();
-        $scope.priority = {selectedPriority: ""};
-        // Associe une valeur à chaque priorité
-        $scope.priorities = [{"name": "No priority", "value": "0"},
-            {"name": "Low priority", "value": "1"},
-            {"name": "Medium priority", "value": "2"},
-            {"name": "High priority", "value": "3"}];
+    /* Supprime un élément donné d'un tableau */
+    var arrayUnset = function (array, val) {
+        var index = getIndex(array, val);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
     };
 
-    $scope.search = function () {
-        // On affiche le bon groupe 
-        $scope.show = 7;
-        
-        console.log("keyword: " + $scope.keyword);
-        databaseService.getTaskByKeyword($scope.keyword).then(function (result) {
-            $scope.tasks = result;
-            console.log("length: " + $scope.tasks.length);
-            console.log("tasks: ");
-            for (var i = 0; i < $scope.tasks.length; i++) {
-                console.log($scope.tasks[i].name);
+    /* Renvoie l'index de l'élément d'un tableau correspondant à l'id de tâche passé en paramètre*/
+    var getIndex = function (array, id) {
+        var found = false;
+        var i = 0;
+        var index = -1;
+
+        while (!found && i < array.length) {
+            if (array[i].task_id === id) {
+                found = true;
+                index = i;
             }
-        });
+            i++;
+        }
+        return index;
     };
 
-    $scope.getTasksByContext = function () {
-        $scope.contextModal.hide();
-
-        // On affiche le bon groupe 
-        $scope.show = 7;
-
-        databaseService.getTasksByContext($scope.context.selectedContext.context_id).then(function (result) {
-            $scope.tasks = result;
-            console.log("length: " + $scope.tasks.length);
-            /*console.log("tasks: ");
-             for (var i = 0; i < $scope.tasks.length; i++) {
-             console.log($scope.tasks[i].name);
-             }*/
-        });
-    };
-
-    $scope.getTasksByPriority = function () {
-        $scope.priorityModal.hide();
-        // On affiche le bon groupe 
-        $scope.show = 7;
-
-        console.log("selected priority: " + $scope.priority.selectedPriority.value);
-        databaseService.getTasksByPriority($scope.priority.selectedPriority.value).then(function (result) {
-            console.log(result);
-            $scope.tasks = result;
-            console.log("length: " + $scope.tasks.length);
-            /*console.log("tasks: ");
-             for (var i = 0; i < $scope.tasks.length; i++) {
-             console.log($scope.tasks[i].name);
-             }*/
-        });
-    };
-
-    $scope.deleteTask = function(task) {
-        databaseService.removeTask($scope.tasks, task).then(function(result) {
-            $scope.tasks = result;
-            console.log("length: " + $scope.tasks.length);
-            console.log("tasks: ");
-             for (var i = 0; i < $scope.tasks.length; i++) {
-             console.log($scope.tasks[i].name);
-             }
-        });
-
-        //arrayUnset($scope.tasks, task);
-    };
-    
     var getMonthInProperFormat = function (month) {
         if (month < 10) {
             month = "0" + month;
