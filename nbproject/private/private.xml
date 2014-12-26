@@ -3,12 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/types.js</file>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/task.js</file>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/index.html</file>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/consultTasks.html</file>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/js/database.js</file>
-            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/addTask.html</file>
-        </group>
-    </open-files>
-</project-private>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/task.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/database.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/home.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/fmnController.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/index.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/contexts.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/consultTasks.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/taskDetails.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/app.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/package.json</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/tasksList.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/addContext.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/js/types.js</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/bower.json</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/settings.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/templates/addTask.html</file>
+            <file>file:/home/marjorie/NetBeansProjects/ForgetMeNot/www/config.xml</file>
+            <file>file:/home/anais/Documents/NetBeansProjects/ForgetMeNot/www/templates/prioritySelectionModal.html</file>
