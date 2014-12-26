@@ -270,23 +270,23 @@ fmnApp.service("databaseService", function ($q) {
         };
         return storePromise.promise;
     };
-
-    this.storeTask = function (task) {
+    
+    this.storeTask = function(task) {
         var keyPromise = $q.defer();
-        storeContent(['tasks'], "tasks", {name: task.name,
-            owner_id: task.owner_id,
-            description: task.description,
-            context_id: task.context_id,
-            duration: task.duration,
-            priority: task.priority,
-            label: task.label,
-            progression: task.progression,
-            dueDate: task.dueDate,
-            lastModification: task.lastModification})
-                .then(function (result) {
-                    console.log("task " + task.name + " successfully added");
-                    keyPromise.resolve(result);
-                });
+        storeContent(['tasks'], "tasks", {name : task.name,
+                                          owner_id : task.owner_id,
+                                          description : task.description,
+                                          context_id : task.context_id,
+                                          duration : task.duration,
+                                          priority : task.priority,
+                                          label : task.label,
+                                          progression : task.progression,
+                                          dueDate : task.dueDate,
+                                          lastModification : task.lastModification})
+          .then(function(result) {
+            console.log("task " + task.name + " successfully added");
+            keyPromise.resolve(result);
+        });
         return keyPromise.promise;
     };
 
