@@ -6,6 +6,14 @@
 // the 2nd parameter is an array of 'requires'
 var fmnApp = angular.module('forget-me-not', ['ionic']);
 
+/* Permet de définir la balise <tasks-list></tasks-list> */
+fmnApp.directive('tasksList', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'templates/tasksList.html'
+    };
+});
+
 fmnApp.controller('popupController', function ($scope, $ionicPopup) {
     $scope.showConfirm = function () {
         //TODO? afficher le nom de la tâche prête à être supprimée
