@@ -27,7 +27,7 @@ and open the template in the editor.
 
     <ion-content class="has-header has-tabs-top padding">     
         <div class="list">
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(7)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(7)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -46,7 +46,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-sunny"></i>
                 Today
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(0)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(0)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -65,7 +65,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-cloudy-night"></i>
                 Tonight
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(1)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(1)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -84,7 +84,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-partlysunny"></i>
                 Tomorrow
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(2)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(2)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -103,7 +103,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-cloudy"></i>
                 Within the next 7 days
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(3)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(3)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -122,7 +122,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-thunderstorm"></i>
                 Within the next 30 days
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(4)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(4)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -141,7 +141,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-moon"></i>
                 Someday
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(5)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(5)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}
@@ -160,7 +160,7 @@ and open the template in the editor.
                 <i class="icon ion-ios7-bell"></i>
                 For a specific date
             </ion-item>
-            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(6)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.id}}">
+            <ion-item class="item-accordion item-icon-left item-button-right" ng-show="isListShown(6)" ng-repeat="task in tasks" ng-href="#/tasks/{{task.task_id}}">
                 <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
                 </div>
                 {{task.name}}

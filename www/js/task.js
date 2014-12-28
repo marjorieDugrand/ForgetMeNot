@@ -321,5 +321,17 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 });
 
 fmnApp.controller("TaskDetailsController", function ($scope, $stateParams, databaseService) {
-    $scope.task = databaseService.getTask(parseInt($stateParams.taskId));
+    $scope.task;
+    $scope.taskOwner;
+    $scope.taskContext;
+    
+    databaseService.getTask(parseInt($stateParams.taskId)).then(function(taskResult) {
+        $scope.task=taskResult;
+        databaseService.getUserByID($scope.task.owner_id).then(function(userResult) {
+            $scope.taskOwner = userResult;
+        });
+        databaseService.getContext($scope.task.context_id).then(function(contextResult) {
+            $scope.taskContext = contextResult;
+        });
+    });
 });

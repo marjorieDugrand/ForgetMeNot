@@ -343,44 +343,52 @@ fmnApp.service("databaseService", function($q) {
     };
     
     this.storeContext = function(context) {
-        var key;
-        //name, owner_id, location, context_id
+        var keyPromise = $q.defer();
         storeContent(['contexts'], 'contexts', {name : context.name,
                                                 owner_id : context.owner_id,
                                                 location : context.location}).then(function(result) {
             console.log("context " + context.name + " successfully added");
-            key = result;
+            keyPromise.resolve(result);
         }); 
-        return key;
+        return keyPromise.promise;
     };  
     
     this.getTask = function(taskId) {
-        var task;
+        var taskPromise = $q.defer();
         getContentByKey(['tasks'], "tasks", taskId).then(function(result) {
-            task = new Task(result.task_id, result.name, result.owner,
-                            result.description, result.context, result.duration,
-                            result.priority, result.label, result.progression,
-                            result.dueDate, result.lastModification);
+            taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
+                                         result.context_id, result.duration, result.priority,
+                                         result.label, result.progression, result.dueDate,
+                                         result.lastModification, result.task_id));
         });
    
-        return task;
+        return taskPromise.promise;
+    };
+    
+    this.getUserByID = function(userId) {
+        var userPromise = $q.defer();
+        getContentByKey(['users'], "users", userId).then(function(result) {
+            userPromise.resolve(new User(result.username, result.email, result.geolocation,
+                                         result.language_id, result.user_id));
+        });
+        return userPromise.promise;      
     };
     
     this.getContext = function(contextId) {
-      var context;
+      var contextPromise=$q.defer();
         getContentByKey(['contexts'], "contexts", contextId).then(function(result) {
-           context = new Context(result.name, result.owner_id, result.location, result.context_id); 
+           contextPromise.resolve(new Context(result.name, result.owner_id,
+                                              result.location, result.context_id)); 
         });
         
-        return context;
+        return contextPromise;
     };
     
     var getContentByKey = function(transactionO, store, key) {
         var objectPromise = $q.defer();
         var transaction = fmnDB.transaction(transactionO);
         var objectStore = transaction.objectStore(store);
-        var request = objectStore.get(key);
-        request.onsuccess = function(event) {
+        objectStore.get(key).onsuccess = function(event) {
           objectPromise.resolve(event.target.result);
           console.log("ok");
         };

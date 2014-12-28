@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-fmnApp.controller("ContextController", function ($scope, userService, databaseService) {
+fmnApp.controller("ContextController", function ($scope, userService, databaseService, $location) {
     $scope.contexts = userService.loadUserContexts();
     $scope.context = new Context();
 
@@ -36,7 +36,10 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
         $scope.context.owner_id = userService.loadUser().user_id;
         //$scope.context.lastModification = Date.now();
-        databaseService.storeContext($scope.context);
+        databaseService.storeContext($scope.context).then(function(result) {
+            $scope.context.context_id = result;
+            $location.path("/contexts/" + $scope.context.context_id);
+        });
     };
 
     $scope.cancelContext = function () {
