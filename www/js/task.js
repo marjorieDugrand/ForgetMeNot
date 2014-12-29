@@ -367,8 +367,10 @@ fmnApp.controller("TaskDetailsController", function ($scope, $stateParams, datab
         databaseService.getUserByID($scope.task.owner_id).then(function(userResult) {
             $scope.taskOwner = userResult;
         });
-        databaseService.getContext($scope.task.context_id).then(function(contextResult) {
-            $scope.taskContext = contextResult;
-        });
+        if($scope.task.context_id !== '') {
+            databaseService.getContext($scope.task.context_id).then(function(contextResult) {
+                $scope.taskContext = contextResult;
+            });
+        }
     });
 });

@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-var User = function(username, email, geolocation, language_id, user_id) {
+var User = function(username, email, geolocation, language_id, user_id, lastModification) {
     this.user_id = user_id;
     this.username = username;
     this.email = email;
     this.geolocation = geolocation;
     this.language_id = language_id;
+    this.lastModification = lastModification || Date.now();
 };
 
 var Task = function (name, owner_id, description, context_id, duration,
@@ -24,17 +25,20 @@ var Task = function (name, owner_id, description, context_id, duration,
     this.label = label || '';
     this.progression = progression || 0;
     this.dueDate = dueDate || '';
-    this.lastModification = lastModification || '';  
+    this.lastModification = lastModification || Date.now();  
 };
 
-var Context = function(name, owner_id, location, context_id) {
+var Context = function(name, owner_id, location, addressUsed, context_id, lastModification) {
     this.context_id = context_id || null;
     this.name = name || '';
     this.owner_id = owner_id || '';
     this.location = location || '';
+    this.addressUsed = addressUsed || '';
+    this.lastModification = lastModification || Date.now();
 };
 
-var Language = function(name, language_id) {
+var Language = function(name, language_id, lastModification) {
     this.language_id = language_id || null;
     this.name = name || '';
+    this.lastModification = lastModification || Date.now();
 };

@@ -10,6 +10,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
     $scope.useAddress = false;
     $scope.useGeolocation = false;
+    $scope.contextSaved = false;
 
     $scope.addressChoiceChange = function () {
         $scope.useAddress = !($scope.useAddress);
@@ -32,13 +33,19 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         return !($scope.useAddress) && $scope.useGeolocation;
     };
 
+    $scope.showContextFooter = function() {
+        return $scope.contextSaved;
+    };
+    
     $scope.saveContext = function () {
 
         $scope.context.owner_id = userService.loadUser().user_id;
-        //$scope.context.lastModification = Date.now();
+        $scope.context.addressUsed = $scope.useAddress;
+        $scope.context.lastModification = Date.now();
         databaseService.storeContext($scope.context).then(function(result) {
             $scope.context.context_id = result;
-            $location.path("/contexts/" + $scope.context.context_id);
+            $scope.contextSaved = true;
+            setTimeout(function(){$location.path("/contexts/" + $scope.context.context_id);}, 2000);
         });
     };
 
