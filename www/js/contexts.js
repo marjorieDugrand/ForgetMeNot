@@ -7,7 +7,7 @@
 fmnApp.controller("ContextController", function ($scope, userService, databaseService, $location) {
     $scope.contexts = userService.loadUserContexts();
     $scope.context = new Context();
-
+    $scope.location = $location;
     $scope.useAddress = false;
     $scope.useGeolocation = false;
     $scope.contextSaved = false;
@@ -45,7 +45,8 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         databaseService.storeContext($scope.context).then(function(result) {
             $scope.context.context_id = result;
             $scope.contextSaved = true;
-            setTimeout(function(){$location.path("/contexts/" + $scope.context.context_id);}, 2000);
+            $scope.location.path("/contexts/" + $scope.context.context_id);
+           // setTimeout(function(){}, 2000);
         });
     };
 
@@ -88,6 +89,53 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
 });
 
+    var printMap = function(position) {
+        console.log("printing map");
+      var mapOptions = {
+        center: position,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+      var marker = new google.maps.Marker({
+         position: position,
+         map: map,
+         title: 'Your location'
+      });
+    };
+    
 fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService) {
-    $scope.context = databaseService.getContext(parseInt($stateParams.contextId));
+    
+    $scope.context = null;
+    $scope.position;
+    
+    databaseService.getContext(parseInt($stateParams.contextId)).then(function(result) {
+        $scope.context = result;
+        if($scope.hasAddress) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': $scope.context.location}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    //var latitude = results[0].geometry.location.lat();
+                    //var longitude = results[0].geometry.location.lng();
+                    //position = new google.maps.LatLng(latitude,longitude);
+                    $scope.position = results[0].geometry.location;
+                    console.log("position 1 : " + $scope.position);
+                    printMap($scope.position);
+                } else {
+                    console.log("Request failed.");
+                }
+            });
+        } else {
+            $scope.position = $scope.context.location;
+            printMap($scope.position);
+        }      
+    });
+    
+    $scope.hasAddress = function() {
+        if($scope.context) {
+            return $scope.context.addressUsed;
+        } else {
+            return false;
+        }
+    };
 });
