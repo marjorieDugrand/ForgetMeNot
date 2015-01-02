@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
-fmnApp.controller("AddContextController", function ($scope, userService, databaseService) {
+fmnApp.controller("AddContextController", function ($scope, userService, databaseService, $location) {
     $scope.context = new Context();
-
+    $scope.location = $location;
     $scope.useAddress = false;
     $scope.useGeolocation = false;
+    $scope.contextSaved = false;
 
     $scope.addressChoiceChange = function () {
         $scope.useAddress = !($scope.useAddress);
@@ -31,11 +32,28 @@ fmnApp.controller("AddContextController", function ($scope, userService, databas
         return !($scope.useAddress) && $scope.useGeolocation;
     };
 
-    $scope.saveContext = function () {
+    $scope.showContextFooter = function () {
+        return $scope.contextSaved;
+    };
 
-        $scope.context.owner_id = userService.loadUser().user_id;
-        //$scope.context.lastModification = Date.now();
-        databaseService.storeContext($scope.context);
+    $scope.saveContext = function () {
+        if ($scope.context.name === '' || $scope.context.name === undefined) {
+            // A afficher dans un footer ?
+            console.log("your context should have a name");
+        }
+        else {
+            console.log("Save context");
+            $scope.context.owner_id = userService.loadUser().user_id;
+            $scope.context.addressUsed = $scope.useAddress;
+            $scope.context.lastModification = Date.now();
+            console.log($scope.context);
+            databaseService.storeContext($scope.context).then(function (result) {
+                $scope.context.context_id = result;
+                $scope.contextSaved = true;
+                $scope.location.path("/contexts/" + $scope.context.context_id);
+                // setTimeout(function(){}, 2000);
+            });
+        }
     };
 
     $scope.cancelContext = function () {
@@ -89,6 +107,57 @@ fmnApp.controller("AddContextController", function ($scope, userService, databas
 
 });
 
+var printMap = function (position) {
+    console.log("printing map");
+    var mapOptions = {
+        center: position,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: 'Your location'
+    });
+};
+
+fmnApp.controller("ContextDetailsController", function ($scope, $stateParams, databaseService) {
+
+    $scope.context = null;
+    $scope.position;
+
+    databaseService.getContext(parseInt($stateParams.contextId)).then(function (result) {
+        $scope.context = result;
+        if ($scope.hasAddress) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': $scope.context.location}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    //var latitude = results[0].geometry.location.lat();
+                    //var longitude = results[0].geometry.location.lng();
+                    //position = new google.maps.LatLng(latitude,longitude);
+                    $scope.position = results[0].geometry.location;
+                    console.log("position 1 : " + $scope.position);
+                    printMap($scope.position);
+                } else {
+                    console.log("Request failed.");
+                }
+            });
+        } else {
+            $scope.position = $scope.context.location;
+            printMap($scope.position);
+        }
+    });
+
+    $scope.hasAddress = function () {
+        if ($scope.context) {
+            return $scope.context.addressUsed;
+        } else {
+            return false;
+        }
+    };
+});
+
 fmnApp.controller("ContextController", function ($scope, userService, databaseService, $ionicPopup) {
     $scope.contexts = userService.loadUserContexts();
 
@@ -124,13 +193,11 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
             array.splice(index, 1);
         }
     };
-
     /* Renvoie l'index de l'élément d'un tableau correspondant à l'id du contexts passé en paramètre*/
     var getIndex = function (array, id) {
         var found = false;
         var i = 0;
         var index = -1;
-
         while (!found && i < array.length) {
             if (array[i].context_id === id) {
                 found = true;
@@ -140,8 +207,4 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         }
         return index;
     };
-});
-
-fmnApp.controller("ContextDetailsController", function ($scope, $stateParams, databaseService) {
-    $scope.context = databaseService.getContext(parseInt($stateParams.contextId));
 });

@@ -31,7 +31,8 @@ fmnApp.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
             .state('home', {
                 url: '/',
-                templateUrl: "templates/home.html"
+                templateUrl: "templates/home.html",
+                controller: 'fmnController'
             })
             .state('new_task', {
                 url: '/new_task',
@@ -51,17 +52,12 @@ fmnApp.config(function ($stateProvider, $urlRouterProvider) {
             .state('task_details', {
                 url: '/tasks/:taskId',
                 templateUrl: "templates/taskDetails.html",
-                controller: 'TaskDetailsCTaskDetaiontroller'
+                controller: 'TaskDetailsController'
             })
             .state('settings', {
                 url: '/settings',
                 templateUrl: "templates/settings.html",
                 controller: "fmnController"
-            })
-            .state('tasks', {
-                url: '/lists',
-                templateUrl: "templates/tasksList.html"
-
             })
             .state('consult_contexts', {
                 url: '/contexts',

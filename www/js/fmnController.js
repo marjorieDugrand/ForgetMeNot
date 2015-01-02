@@ -50,6 +50,7 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
     $scope.isWelcomePage = function () {
         return $state.current.name === 'home';
     };
+
     $scope.languages;
     $scope.user;
     userService.serviceInit().then(function () {
@@ -95,7 +96,14 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
 
     var getTasksForToday = function () {
         var today = new Date();
-        databaseService.getTasksByCondition("today", today).then(function (result) {
+        var year = today.getFullYear();
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+
+        month = getMonthInProperFormat(month);
+        day = getDayInProperFormat(day);
+        date = year + '-' + month + '-' + day;
+        databaseService.getTasksByCondition("preciseDate", date).then(function (result) {
             $scope.tasksForToday = result;
             console.log("tasks for today: " + $scope.tasksForToday.length);
             // Sélectionne le message à afficher en fonction du nombre de tâches
@@ -114,7 +122,15 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
 
     var getOverdueTasks = function () {
         var today = new Date();
-        databaseService.getTasksByCondition("overdue", today).then(function (result) {
+        var year = today.getFullYear();
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+
+        month = getMonthInProperFormat(month);
+        day = getDayInProperFormat(day);
+        date = year + '-' + month + '-' + day;
+
+        databaseService.getTasksByCondition("beforeDate", date).then(function (result) {
             $scope.overdueTasks = result;
             console.log("overdue tasks: " + $scope.overdueTasks.length);
             // Sélectionne le message à afficher en fonction du nombre de tâches
@@ -151,6 +167,20 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
         return color;
     };
 
+    var getMonthInProperFormat = function (month) {
+        if (month < 10) {
+            month = "0" + month;
+        }
+        return month;
+    };
+
+    var getDayInProperFormat = function (day) {
+        if (day < 10) {
+            day = "0" + day;
+        }
+        return day;
+    };
+    
     $scope.saveSettings = function () {
         console.log("Save settings");
     };

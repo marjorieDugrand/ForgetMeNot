@@ -48,6 +48,7 @@
         "marker": {},
         "ion-item": {
             "attributes": {
+                "ng-href": {},
                 "ng-repeat": {},
                 "class": {}
             }

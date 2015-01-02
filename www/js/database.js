@@ -15,7 +15,7 @@ fmnApp.service("databaseService", function ($q) {
         var dbPromise = $q.defer();
         createDB().then(function () {
             if (!doesDBContainsUser('Rajon')) {
-                console.log('ok');
+                console.log('adding rajon');
                 addUser(new User('Rajon', 'rajon.rondo@gmail.com', true, 3));
             }
             dbPromise.resolve();
@@ -36,7 +36,6 @@ fmnApp.service("databaseService", function ($q) {
         };
 
         request.onupgradeneeded = function (evt) {
-            console.log("upgrade");
             fmnDB = evt.currentTarget.result;
             var usersOS = fmnDB.createObjectStore("users",
                     {keyPath: "user_id", autoIncrement: true});
@@ -44,6 +43,7 @@ fmnApp.service("databaseService", function ($q) {
             usersOS.createIndex("email", "email", {unique: true});
             usersOS.createIndex("geolocation", "geolocation", {unique: false});
             usersOS.createIndex("language_id", "language_id", {unique: false});
+            usersOS.createIndex("lastModification", "lastModification", {unique: false});
 
             var tasksOS = fmnDB.createObjectStore("tasks",
                     {keyPath: "task_id", autoIncrement: true});
@@ -62,7 +62,9 @@ fmnApp.service("databaseService", function ($q) {
                     {keyPath: "context_id", autoIncrement: true});
             contextsOS.createIndex("name", "name", {unique: false});
             contextsOS.createIndex("owner_id", "owner_id", {unique: false});
+            contextsOS.createIndex("addressUsed", "addressUsed", {unique: false});
             contextsOS.createIndex("location", "location", {unique: false});
+            contextsOS.createIndex("lastModification", "lastModification", {unique: false});
 
             var dateListsOS = fmnDB.createObjectStore("dateLists",
                     {keyPath: "list_id", autoIncrement: true});
@@ -70,14 +72,15 @@ fmnApp.service("databaseService", function ($q) {
             dateListsOS.createIndex("owner_id", "owner_id", {unique: false});
 
             var languagesData = [
-                {name: "French"},
-                {name: "Spanish"},
-                {name: "English"}
+                {name: "French", lastModification: Date.now()},
+                {name: "Spanish", lastModification: Date.now()},
+                {name: "English", lastModification: Date.now()}
             ];
 
             var languagesOS = fmnDB.createObjectStore("languages",
                     {keyPath: "language_id", autoIncrement: true});
             languagesOS.createIndex("name", "name", {unique: true});
+            languagesOS.createIndex("lastModification", "lastModification", {unique: false});
             var i;
             for (i in languagesData) {
                 languagesOS.add(languagesData[i]);
@@ -118,7 +121,8 @@ fmnApp.service("databaseService", function ($q) {
                             userResult.result.email,
                             userResult.result.geolocation,
                             userResult.result.language_id,
-                            userResult.result.user_id);
+                            userResult.result.user_id,
+                            userResult.result.lastModification);
                     console.log('user recovered');
                     userPromise.resolve(user);
                 });
@@ -130,6 +134,7 @@ fmnApp.service("databaseService", function ($q) {
         var transaction = fmnDB.transaction(transactionO, 'readonly');
         var store = transaction.objectStore(store);
         var index = store.index(indexName);
+        console.log("jusque là ça va");
         index.get(value).onsuccess = function (evt) {
             contentPromise.resolve(evt.target);
         };
@@ -140,7 +145,8 @@ fmnApp.service("databaseService", function ($q) {
         var languages = [];
         getRecords(['languages'], 'languages').then(function (result) {
             for (var l = 0; l < result.length; l++) {
-                languages.push(new Language(result[l].name, result[l].language_id));
+                languages.push(new Language(result[l].name, result[l].language_id,
+                                            result[l].lastModification));
             }
         });
         return languages;
@@ -151,7 +157,8 @@ fmnApp.service("databaseService", function ($q) {
         getRecordsWithOwnerCondition(['contexts'], 'contexts', user_id).then(function (result) {
             for (var c = 0; c < result.length; c++) {
                 contexts.push(new Context(result[c].name, result[c].owner_id,
-                        result[c].location, result[c].context_id));
+                                          result[c].location, result[c].addressUsed,
+                                          result[c].context_id,result[c].lastModification));
             }
         });
         return contexts;
@@ -187,10 +194,11 @@ fmnApp.service("databaseService", function ($q) {
                             }
                         }
                         break;
-                    case "dueDate":
+                    case "forDate":
                         if (condition !== "") {
-                            var dueDate = new Date(record.dueDate);
-                            if (dueDate <= condition) {
+                            //var dueDate = new Date(record.dueDate);
+                            var dueDate = record.dueDate;
+                            if (dueDate !== "" && dueDate <= condition) {
                                 records.push(record);
                             }
                         }
@@ -200,15 +208,15 @@ fmnApp.service("databaseService", function ($q) {
                             }
                         }
                         break;
-                    case "today":
-                        var dueDate = new Date(record.dueDate);
-                        if (dueDate === condition) {
+                    case "preciseDate":
+                        var dueDate = record.dueDate;
+                        if (dueDate !== "" && dueDate === condition) {
                             records.push(record);
                         }
                         break;
-                    case "overdue":
-                        var dueDate = new Date(record.dueDate);
-                        if (dueDate < condition) {
+                    case "beforeDate":
+                        var dueDate = record.dueDate;
+                        if (dueDate !== "" && dueDate < condition) {
                             records.push(record);
                         }
                         break;
@@ -301,7 +309,53 @@ fmnApp.service("databaseService", function ($q) {
                 });
         return keyPromise.promise;
     };
-
+    
+    this.storeContext = function(context) {
+        var keyPromise = $q.defer();
+        storeContent(['contexts'], 'contexts', {name : context.name,
+                                                owner_id : context.owner_id,
+                                                location : context.location,
+                                                addressUsed : context.addressUsed,
+                                                lastModification : context.lastModification})
+                .then(function(result) {
+                    console.log("context " + context.name + " successfully added");
+                    keyPromise.resolve(result);
+                }); 
+        return keyPromise.promise;
+    };  
+    
+    this.getTask = function(taskId) {
+        var taskPromise = $q.defer();
+        getContentByKey(['tasks'], "tasks", taskId).then(function(result) {
+            taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
+                                         result.context_id, result.duration, result.priority,
+                                         result.label, result.progression, result.dueDate,
+                                         result.lastModification, result.task_id));
+        });
+   
+        return taskPromise.promise;
+    };
+    
+    this.getUserByID = function(userId) {
+        var userPromise = $q.defer();
+        getContentByKey(['users'], "users", userId).then(function(result) {
+            userPromise.resolve(new User(result.username, result.email, result.geolocation,
+                                         result.language_id, result.user_id, result.lastModification));
+        });
+        return userPromise.promise;      
+    };
+    
+    this.getContext = function(contextId) {
+      var contextPromise=$q.defer();
+        getContentByKey(['contexts'], "contexts", contextId).then(function(result) {
+           contextPromise.resolve(new Context(result.name, result.owner_id,
+                                              result.location, result.addressUsed,
+                                              result.context_id, result.lastModification));
+        });
+        
+        return contextPromise.promise;   
+    };
+    
     this.removeTaskFromDB = function (taskId) {
         var objectStore = fmnDB.transaction(['tasks'], 'readwrite').objectStore('tasks');
         // Supprime la tâche de la BDD
@@ -310,7 +364,7 @@ fmnApp.service("databaseService", function ($q) {
             console.log("The task has been removed");
         };
     };
-
+/*
     this.storeContext = function (context) {
         var key;
         //name, owner_id, location, context_id
@@ -342,7 +396,7 @@ fmnApp.service("databaseService", function ($q) {
         });
 
         return context;
-    };
+    };*/
 
     this.removeContextFromDB = function (contextId) {
         // On modifie le contexte des tâches associées au contexte à supprimer
@@ -370,10 +424,9 @@ fmnApp.service("databaseService", function ($q) {
         var objectPromise = $q.defer();
         var transaction = fmnDB.transaction(transactionO);
         var objectStore = transaction.objectStore(store);
-        var request = objectStore.get(key);
-        request.onsuccess = function (event) {
-            objectPromise.resolve(event.target.result);
-            console.log("ok");
+        objectStore.get(key).onsuccess = function(event) {
+          objectPromise.resolve(event.target.result);
+          console.log("ok");
         };
         return objectPromise.promise;
     };

@@ -9,26 +9,28 @@
             <div id="main-content">
                 <div class="menu-item" id="notifications">
                     <h2 class="section-name" id="notifications">Notifications</h2>
-                    <div class="list card">
-                        <div class="item" ng-if="isOverdueTasksShown(2)">
-                            You have {{overdueTasks.length}} overdue tasks.
-                        </div>
-                        <div class="item" ng-if="isOverdueTasksShown(0)">
-                            Congratulations, you do not have overdue tasks!
-                        </div>
-                        <div class="item" ng-if="isOverdueTasksShown(1)">
-                            You have only one overdue task... Come on, you can do it!
-                        </div>
+                    <div class="card">
+                        <div class="item item-text-wrap">
+                            <p ng-if="isOverdueTasksShown(2)">
+                                You have {{overdueTasks.length}} overdue tasks.
+                            </p>
+                            <p ng-if="isOverdueTasksShown(0)">
+                                Congratulations, you do not have overdue tasks!
+                            </p>
+                            <p ng-if="isOverdueTasksShown(1)">
+                                You have only one overdue task... Come on, you can do it!
+                            </p>
 
-                        <div class="item" ng-if="isTasksForTodayShown(2)">
-                            You have {{tasksForToday.length}} tasks for today.
+                            <p ng-if="isTasksForTodayShown(2)">
+                                You have {{tasksForToday.length}} tasks for today.
+                            </p>
+                            <p ng-if="isTasksForTodayShown(0)">
+                                You have no task for today!
+                            </p>
+                            <p ng-if="isTasksForTodayShown(1)">
+                                You have only one task for today.
+                            </p> 
                         </div>
-                        <div class="item" ng-if="isTasksForTodayShown(0)">
-                            You have no task for today!
-                        </div>
-                        <div class="item" ng-if="isTasksForTodayShown(1)">
-                            You have only one task for today.
-                        </div> 
                     </div>    
                 </div>
                 <div class="menu-item" id="tasks">

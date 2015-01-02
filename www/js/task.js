@@ -4,14 +4,20 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
     $scope.contexts = userService.loadUserContexts();
 
     $scope.saveTask = function () {
-        console.log("Save task");
-        $scope.task.owner_id = userService.loadUser().user_id;
-        $scope.task.lastModification = Date.now();
-        $scope.task.context_id = $scope.task.context_id.context_id;
-	databaseService.storeTask($scope.task).then(function(result) {
-            $scope.task.task_id = result;
-            $location.path("/tasks/" + $scope.task.task_id);
-        });
+        if ($scope.task.name === '' || $scope.task.name === undefined) {
+            // A afficher dans un footer ?
+            console.log("your task should have a name");
+        }
+        else {
+            console.log("Save task");
+            $scope.task.owner_id = userService.loadUser().user_id;
+            $scope.task.lastModification = Date.now();
+            $scope.task.context_id = $scope.task.context_id.context_id;
+            databaseService.storeTask($scope.task).then(function (result) {
+                $scope.task.task_id = result;
+                $location.path("/tasks/" + $scope.task.task_id);
+            });
+        }
     };
 
     $scope.cancelTask = function () {
@@ -39,9 +45,9 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
     // 6: for a specific date
     // 7: by context/by keyword/by priority
     $scope.show = null;
-    
+
     /* Déclarations des fenêtres modales */
-    
+
     $ionicModal.fromTemplateUrl('templates/dateSelectionModal.html', {
         scope: $scope
     }).then(function (dateModal) {
@@ -63,6 +69,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 
     /* Affichage des tâches par date d'échéance */
     $scope.toggleList = function (condition) {
+        var precise = false;
         // On réinitialise les taches
         $scope.tasks = [];
         // On récupère la date du jour
@@ -81,13 +88,25 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         console.log("list shown: " + $scope.show);
         switch (condition) {
             case 0: /***** TASKS FOR TODAY *****/
-                date = today;
+                var year = today.getFullYear();
+                var month = today.getMonth() + 1;
+                var day = today.getDate();
+
+                month = getMonthInProperFormat(month);
+                day = getDayInProperFormat(day);
+                date = year + '-' + month + '-' + day;
                 console.log("Get tasks for today: " + date);
                 break;
 
             case 1: /***** TASKS FOR TONIGHT *****/
-                date = today;
-                console.log("Get tasks for today: " + date);
+                var year = today.getFullYear();
+                var month = today.getMonth() + 1;
+                var day = today.getDate();
+
+                month = getMonthInProperFormat(month);
+                day = getDayInProperFormat(day);
+                date = year + '-' + month + '-' + day;
+                console.log("Get tasks for tonight: " + date);
                 break;
 
             case 2: /***** TASKS FOR TOMORROW *****/
@@ -132,7 +151,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
                 month = getMonthInProperFormat(month);
                 tomorrow = getDayInProperFormat(tomorrow);
 
-                date = new Date(year + '-' + month + '-' + tomorrow);
+                date = year + '-' + month + '-' + tomorrow;
                 console.log("Get tasks for tomorrow: " + date);
                 break;
 
@@ -164,11 +183,11 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
                 month = getMonthInProperFormat(month);
                 nextWeek = getDayInProperFormat(nextWeek);
 
-                date = new Date(year + '-' + month + '-' + nextWeek);
+                date = year + '-' + month + '-' + nextWeek;
                 console.log("Get tasks for next week: " + date);
                 break;
 
-            case 4: /***** TASKS FOR MONTH *****/
+            case 4: /***** TASKS FOR NEXT MONTH *****/
                 var month = today.getMonth() + 1;
                 var nextMonth;
                 var year = today.getFullYear();
@@ -185,8 +204,9 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 
                 // Important : le mois et le jour doivent etre au bon format
                 nextMonth = getMonthInProperFormat(nextMonth);
+                var day = getDayInProperFormat(today.getDate())
 
-                date = new Date(year + '-' + nextMonth + '-' + today.getDate());
+                date = year + '-' + nextMonth + '-' + day;
                 console.log("Get tasks for next month: " + date);
                 break;
 
@@ -196,22 +216,36 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 
             case 6: /***** TASKS FOR A SPECIFIC DATE *****/
                 console.log("selected date: " + $scope.date.selectedDate);
-                date = new Date($scope.date.selectedDate);
+                precise = true;
+                //date = new Date($scope.date.selectedDate);
+                date = $scope.date.selectedDate;
                 $scope.dateModal.hide();
                 break;
             default:
                 console.log("Unknown condition");
         }
-        databaseService.getTasksByCondition("dueDate", date).then(function (result) {
-            $scope.tasks = result;
-            console.log("length: " + $scope.tasks.length);
-            /*for (var i = 0; i < $scope.tasks.length; i++) {
-             console.log($scope.tasks[i].name);
-             }*/
-        });
+
+        if (precise) {
+            databaseService.getTasksByCondition("preciseDate", date).then(function (result) {
+                $scope.tasks = result;
+                console.log("length: " + $scope.tasks.length);
+                /*for (var i = 0; i < $scope.tasks.length; i++) {
+                 console.log($scope.tasks[i].name);
+                 }*/
+            });
+        }
+        else {
+            databaseService.getTasksByCondition("forDate", date).then(function (result) {
+                $scope.tasks = result;
+                console.log("length: " + $scope.tasks.length);
+                /*for (var i = 0; i < $scope.tasks.length; i++) {
+                 console.log($scope.tasks[i].name);
+                 }*/
+            });
+        }
     };
 
-    /* Renvoie vrai si la liste actuellement affichée est celle passée en paramètre, faux sinon */ 
+    /* Renvoie vrai si la liste actuellement affichée est celle passée en paramètre, faux sinon */
     $scope.isListShown = function (list) {
         return $scope.show === list;
     };
@@ -284,7 +318,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
              }*/
         });
     };
-    
+
     /* Renvoie la couleur associée à la priorité de la tâche */
     $scope.getPriorityClass = function (priority) {
         var color;
@@ -305,7 +339,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         return color;
     };
 
-   $scope.showConfirm = function (task) {
+    $scope.showConfirm = function (task) {
         var confirmPopup = $ionicPopup.confirm({
             title: 'Remove a task',
             template: 'Are you sure you want to remove the task "' + task.name + '"?',
@@ -322,7 +356,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
             }
         });
     };
-    
+
     /* Supprime une tâche (de la BD + met à jour l'affichage) */
     $scope.removeTask = function (task) {
         databaseService.removeTaskFromDB(task.task_id);
@@ -374,5 +408,19 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 });
 
 fmnApp.controller("TaskDetailsController", function ($scope, $stateParams, databaseService) {
-    $scope.task = databaseService.getTask(parseInt($stateParams.taskId));
+    $scope.task;
+    $scope.taskOwner;
+    $scope.taskContext;
+
+    databaseService.getTask(parseInt($stateParams.taskId)).then(function (taskResult) {
+        $scope.task = taskResult;       
+        databaseService.getUserByID($scope.task.owner_id).then(function (userResult) {
+            $scope.taskOwner = userResult;
+        });
+        if ($scope.task.context_id !== '') {
+            databaseService.getContext($scope.task.context_id).then(function (contextResult) {
+                $scope.taskContext = contextResult;
+            });
+        }
+    });
 });
