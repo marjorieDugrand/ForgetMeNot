@@ -364,39 +364,6 @@ fmnApp.service("databaseService", function ($q) {
             console.log("The task has been removed");
         };
     };
-/*
-    this.storeContext = function (context) {
-        var key;
-        //name, owner_id, location, context_id
-        storeContent(['contexts'], 'contexts', {name: context.name,
-            owner_id: context.owner_id,
-            location: context.location}).then(function (result) {
-            console.log("context " + context.name + " successfully added");
-            key = result;
-        });
-        return key;
-    };
-
-    this.getTask = function (taskId) {
-        var task;
-        getContentByKey(['tasks'], "tasks", taskId).then(function (result) {
-            task = new Task(result.task_id, result.name, result.owner,
-                    result.description, result.context, result.duration,
-                    result.priority, result.label, result.progression,
-                    result.dueDate, result.lastModification);
-        });
-
-        return task;
-    };
-
-    this.getContext = function (contextId) {
-        var context;
-        getContentByKey(['contexts'], "contexts", contextId).then(function (result) {
-            context = new Context(result.name, result.owner_id, result.location, result.context_id);
-        });
-
-        return context;
-    };*/
 
     this.removeContextFromDB = function (contextId) {
         // On modifie le contexte des tâches associées au contexte à supprimer
