@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ion-popover-view>
+    <ion-header-bar class="padding">
+        <h3>Notifications</h3>
+    </ion-header-bar>
+
+    <ion-content class="has-header padding">
+        <div class="list">
+            <div class="item item-divider" ng-if="isOverdueTasksShown(2)">
+                You have {{overdueTasks.length}} overdue tasks.
+            </div>
+            <div class="item item-divider" ng-if="isOverdueTasksShown(0)">
+                Congratulations, you do not have overdue tasks!
+            </div>
+            <div class="item item-divider" ng-if="isOverdueTasksShown(1)">
+                You have only one overdue task... <br />
+                Come on, you can do it!
+            </div>
+            <div class="item item-icon-left" ng-repeat="task in overdueTasks">
+                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
+                </div>
+                {{task.name}}
+            </div>
+
+            <div class="item item-divider" ng-if="isTasksForTodayShown(2)">
+                You have {{tasksForToday.length}} tasks for today.
+            </div>
+            <div class="item item-divider" ng-if="isTasksForTodayShown(0)">
+                You have no task for today!
+            </div>
+            <div class="item item-divider" ng-if="isTasksForTodayShown(1)">
+                You have only one task for today.
+            </div>            
+            <ion-item class="item item-icon-left" ng-repeat="task in tasksForToday">
+                <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
+                </div>
+                {{task.name}}
+            </ion-item>          
+        </div>
+    </ion-content>
+</ion-popover-view>

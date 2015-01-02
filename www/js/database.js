@@ -200,6 +200,18 @@ fmnApp.service("databaseService", function ($q) {
                             }
                         }
                         break;
+                    case "today":
+                        var dueDate = new Date(record.dueDate);
+                        if (dueDate === condition) {
+                            records.push(record);
+                        }
+                        break;
+                    case "overdue":
+                        var dueDate = new Date(record.dueDate);
+                        if (dueDate < condition) {
+                            records.push(record);
+                        }
+                        break;
                     default:
                         console.log("Bad type argument!");
                 }
@@ -270,23 +282,23 @@ fmnApp.service("databaseService", function ($q) {
         };
         return storePromise.promise;
     };
-    
-    this.storeTask = function(task) {
+
+    this.storeTask = function (task) {
         var keyPromise = $q.defer();
-        storeContent(['tasks'], "tasks", {name : task.name,
-                                          owner_id : task.owner_id,
-                                          description : task.description,
-                                          context_id : task.context_id,
-                                          duration : task.duration,
-                                          priority : task.priority,
-                                          label : task.label,
-                                          progression : task.progression,
-                                          dueDate : task.dueDate,
-                                          lastModification : task.lastModification})
-          .then(function(result) {
-            console.log("task " + task.name + " successfully added");
-            keyPromise.resolve(result);
-        });
+        storeContent(['tasks'], "tasks", {name: task.name,
+            owner_id: task.owner_id,
+            description: task.description,
+            context_id: task.context_id,
+            duration: task.duration,
+            priority: task.priority,
+            label: task.label,
+            progression: task.progression,
+            dueDate: task.dueDate,
+            lastModification: task.lastModification})
+                .then(function (result) {
+                    console.log("task " + task.name + " successfully added");
+                    keyPromise.resolve(result);
+                });
         return keyPromise.promise;
     };
 
@@ -330,6 +342,28 @@ fmnApp.service("databaseService", function ($q) {
         });
 
         return context;
+    };
+
+    this.removeContextFromDB = function (contextId) {
+        // On modifie le contexte des tâches associées au contexte à supprimer
+        this.getTasksByCondition("context", contextId).then(function (result) {
+            for (var i = 0; i < result.length; i++) {
+                console.log(result[i].name);
+                result[i].context_id = '';
+                var objectStoreForTask = fmnDB.transaction(['tasks'], 'readwrite').objectStore('tasks');
+                var taskRequest = objectStoreForTask.put(result[i]);
+                taskRequest.onsuccess = function () {
+                    console.log("The task has been updated.");
+                };
+            }
+
+            // Supprime le contexte de la BDD
+            var objectStoreForContext = fmnDB.transaction(['contexts'], 'readwrite').objectStore('contexts');
+            var contextRequest = objectStoreForContext.delete(contextId);
+            contextRequest.onsuccess = function () {
+                console.log("The context has been removed");
+            };
+        });
     };
 
     var getContentByKey = function (transactionO, store, key) {

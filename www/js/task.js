@@ -25,8 +25,7 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
     };
 });
 
-fmnApp.controller("TaskListsController", function ($scope, databaseService, $ionicModal, userService) {
-    $scope.contexts = userService.loadUserContexts();
+fmnApp.controller("TaskListsController", function ($scope, databaseService, $ionicModal, userService, $ionicPopup) {
     $scope.tasks = [];
     $scope.keyword;
     // Indique la liste qui est actuellement affichée
@@ -204,7 +203,6 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
                 console.log("Unknown condition");
         }
         databaseService.getTasksByCondition("dueDate", date).then(function (result) {
-            console.log(result);
             $scope.tasks = result;
             console.log("length: " + $scope.tasks.length);
             /*for (var i = 0; i < $scope.tasks.length; i++) {
@@ -221,7 +219,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
     /* Affichage de la fenêtre modale pour les contextes */
     $scope.showContextsModal = function () {
         $scope.contextModal.show();
-        $scope.contexts = $scope.$parent.contexts;
+        $scope.contexts = userService.loadUserContexts();
         $scope.context = {selectedContext: ""};
     };
 
@@ -307,6 +305,24 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         return color;
     };
 
+   $scope.showConfirm = function (task) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Remove a task',
+            template: 'Are you sure you want to remove the task "' + task.name + '"?',
+            okType: 'button-energized',
+            cancelType: 'button-energized'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                console.log('You are sure');
+                $scope.removeTask(task);
+            }
+            else {
+                console.log('You are not sure');
+            }
+        });
+    };
+    
     /* Supprime une tâche (de la BD + met à jour l'affichage) */
     $scope.removeTask = function (task) {
         databaseService.removeTaskFromDB(task.task_id);

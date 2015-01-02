@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 
-fmnApp.controller("ContextController", function ($scope, userService, databaseService) {
-    $scope.contexts = userService.loadUserContexts();
+fmnApp.controller("AddContextController", function ($scope, userService, databaseService) {
     $scope.context = new Context();
 
     $scope.useAddress = false;
@@ -51,6 +50,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
                 console.log("geolocation supported");
                 navigator.geolocation.getCurrentPosition(function (pos) {
                     $scope.context.location = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                    var latlng = $scope.context.location;
                     var mapOptions = {
                         center: $scope.context.location,
                         zoom: 16,
@@ -62,6 +62,17 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
                         map: map,
                         title: 'Your location'
                     });
+                    // Trace un cercle autour de la position repérée indiquant la précision de la localisation
+                    var circle = new google.maps.Circle({
+                        center: latlng,
+                        radius: pos.coords.accuracy,
+                        map: map,
+                        fillColor: '#46b4c8',
+                        fillOpacity: 0.3,
+                        strokeColor: '#46b4c8',
+                        strokeOpacity: 1.0
+                    });
+                    map.fitBounds(circle.getBounds());
                 });
             }
             else {
@@ -78,6 +89,59 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
 });
 
-fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService) {
+fmnApp.controller("ContextController", function ($scope, userService, databaseService, $ionicPopup) {
+    $scope.contexts = userService.loadUserContexts();
+
+    $scope.showConfirm = function (context) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Remove a context',
+            template: 'Are you sure you want to remove the context "' + context.name + '"? \nAll the tasks related to this context will have a null context from now on.',
+            okType: 'button-energized',
+            cancelType: 'button-energized'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                console.log('You are sure');
+                removeContext(context);
+            }
+            else {
+                console.log('You are not sure');
+            }
+        });
+    };
+
+    /* Supprime un contexte (de la BD + met à jour l'affichage) */
+    var removeContext = function (context) {
+        databaseService.removeContextFromDB(context.context_id);
+        arrayUnset($scope.contexts, context.context_id);
+        console.log("length: " + $scope.contexts.length);
+    };
+
+    /* Supprime un élément donné d'un tableau */
+    var arrayUnset = function (array, val) {
+        var index = getIndex(array, val);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    };
+
+    /* Renvoie l'index de l'élément d'un tableau correspondant à l'id du contexts passé en paramètre*/
+    var getIndex = function (array, id) {
+        var found = false;
+        var i = 0;
+        var index = -1;
+
+        while (!found && i < array.length) {
+            if (array[i].context_id === id) {
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        return index;
+    };
+});
+
+fmnApp.controller("ContextDetailsController", function ($scope, $stateParams, databaseService) {
     $scope.context = databaseService.getContext(parseInt($stateParams.contextId));
 });
