@@ -21,7 +21,8 @@ and open the template in the editor.
                 {{task.description}}
             </div>
             <div class="item item-text-wrap row">
-                <span class="col col-10">Context</span> {{taskContext.name}}
+                <span class="col col-10">Context</span>
+                <a href ng-href="#/contexts/{{taskContext.context_id}}">{{taskContext.name}}</a>
                 <!--<hr />
                 <div id="map-canvas" style="width:100%;height:380px;" ng-show="geolocationUsed"></div>
                 <div ng-show="addressUsed"> 
