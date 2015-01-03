@@ -1,5 +1,24 @@
 {
     "elements": {
+        "ion-header-bar": {
+            "attributes": {
+                "class": {}
+            }
+        },
+        "ion-popover-view": {},
+        "ion-content": {
+            "attributes": {
+                "padding": {},
+                "ng-class": {},
+                "has-header": {},
+                "class": {}
+            }
+        },
+        "ion-nav-bar": {
+            "attributes": {
+                "animation": {}
+            }
+        },
         "div": {
             "attributes": {
                 "ng-show": {},
@@ -8,6 +27,7 @@
                 "ui-options": {},
                 "icon": {},
                 "style": {},
+                "ng-repeat": {},
                 "id": {},
                 "ng-app": {},
                 "ng-if": {},
@@ -20,34 +40,23 @@
                 "animation": {}
             }
         },
-        "ion-header-bar": {
-            "attributes": {
-                "class": {}
-            }
-        },
         "ui-gmap-google-map": {
             "attributes": {
                 "zoom": {}
             }
         },
         "marker": {},
+        "ion-item": {
+            "attributes": {
+                "ng-href": {},
+                "ng-repeat": {},
+                "class": {}
+            }
+        },
         "ion-modal-view": {},
         "tasks-list": {
             "attributes": {
                 "ng-show": {}
-            }
-        },
-        "ion-content": {
-            "attributes": {
-                "padding": {},
-                "ng-class": {},
-                "has-header": {},
-                "class": {}
-            }
-        },
-        "ion-nav-bar": {
-            "attributes": {
-                "animation": {}
             }
         },
         "ion-pane": {},

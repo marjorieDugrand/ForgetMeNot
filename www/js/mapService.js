@@ -23,7 +23,7 @@ fmnApp.service('mapService', function() {
         navigator.geolocation.getCurrentPosition(function (pos) {
             context.location = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
             console.log('position : ' + context.location);
-            printMap(mapId, context.location);
+            printMap(mapId, context.location, pos);
         });
    };
 
@@ -70,7 +70,7 @@ fmnApp.service('mapService', function() {
         }
    };
    
-   var printMap = function(mapId, position) {
+   var printMap = function(mapId, position, calculatedPosition) {
         console.log("printing map");
         var mapOptions = {
             center: position,
@@ -85,6 +85,17 @@ fmnApp.service('mapService', function() {
             map: map,
             title: 'Your location'
         });
+        
+         var circle = new google.maps.Circle({
+                        center: position,
+                        radius: calculatedPosition.coords.accuracy,
+                        map: map,
+                        fillColor: '#46b4c8',
+                        fillOpacity: 0.3,
+                        strokeColor: '#46b4c8',
+                        strokeOpacity: 1.0
+                    });
+        map.fitBounds(circle.getBounds());
     };    
 });
 

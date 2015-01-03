@@ -14,82 +14,60 @@ fmnApp.directive('tasksList', function () {
     };
 });
 
-fmnApp.controller('popupController', function ($scope, $ionicPopup) {
-    $scope.showConfirm = function () {
-        //TODO? afficher le nom de la tâche prête à être supprimée
-        var confirmPopup = $ionicPopup.confirm({
-            title: 'Supprimer une tâche',
-            template: 'Etes-vous sûr de vouloir supprimer cette tâche ?'
-        });
-        confirmPopup.then(function (res) {
-            if (res) {
-                console.log('You are sure');
-                //TODO: supprimer la tâche, afficher un message de confirmation
-            }
-            else {
-                console.log('You are not sure');
-            }
-        });
-    };
-})
+fmnApp.run(function ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // // for form inputs)
+        // if (window.cordova && window.cordova.plugins.Keyboard) {
+        //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        //}
+        if (window.StatusBar) {
+            StatusBar.styleDefault();
+        }
+    });
+});
 
-        .run(function ($ionicPlatform) {
-            $ionicPlatform.ready(function () {
-                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-                // // for form inputs)
-                // if (window.cordova && window.cordova.plugins.Keyboard) {
-                //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                //}
-                if (window.StatusBar) {
-                    StatusBar.styleDefault();
-                }
+fmnApp.config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+            .state('home', {
+                url: '/',
+                templateUrl: "templates/home.html",
+                controller: 'fmnController'
+            })
+            .state('new_task', {
+                url: '/new_task',
+                templateUrl: "templates/addTask.html",
+                controller: 'AddTaskController'
+            })
+            .state('new_context', {
+                url: '/new_context',
+                templateUrl: "templates/addContext.html",
+                controller: 'AddContextController'
+            })
+            .state('consult_tasks', {
+                url: '/tasks',
+                templateUrl: "templates/consultTasks.html",
+                controller: 'TaskListsController'
+            })
+            .state('task_details', {
+                url: '/tasks/:taskId',
+                templateUrl: "templates/taskDetails.html",
+                controller: 'TaskDetailsController'
+            })
+            .state('settings', {
+                url: '/settings',
+                templateUrl: "templates/settings.html",
+                controller: "fmnController"
+            })
+            .state('consult_contexts', {
+                url: '/contexts',
+                templateUrl: "templates/consultContexts.html",
+                controller: 'ContextController'
+            })
+            .state('context_details', {
+                url: '/contexts/:contextId',
+                templateUrl: "templates/contextDetails.html",
+                controller: "ContextDetailsController"
             });
-        })
-        .config(function ($stateProvider, $urlRouterProvider) {
-            $stateProvider
-                    .state('home', {
-                        url: '/',
-                        templateUrl: "templates/home.html"
-                    })
-                    .state('new_task', {
-                        url: '/new_task',
-                        templateUrl: "templates/addTask.html",
-                        controller: 'AddTaskController'
-                    })
-                    .state('new_context', {
-                        url: '/new_context',
-                        templateUrl: "templates/addContext.html",
-                        controller: 'ContextController'
-                    })
-                    .state('consult_tasks', {
-                        url: '/tasks',
-                        templateUrl: "templates/consultTasks.html",
-                        controller: 'TaskListsController'
-                    })
-                    .state('task_details', {
-                        url: '/tasks/:taskId',
-                        templateUrl: "templates/taskDetails.html",
-                        controller: 'TaskDetailsController'
-                    })
-                    .state('settings', {
-                        url: '/settings',
-                        templateUrl: "templates/settings.html",
-                        controller: "fmnController"
-                    })
-                    .state('tasks', {
-                        url: '/lists',
-                        templateUrl: "templates/tasksList.html"
-
-                    })
-                    .state('consult_contexts', {
-                        url: '/contexts',
-                        templateUrl: "templates/consultContexts.html",
-                        controller: 'ContextController'
-                    })
-                    .state('context_details', {
-                        url: '/contexts/:contextId',
-                        templateUrl: "templates/contextDetails.html",
-                        controller: "ContextDetailsController"
-                    });
-            $urlRouterProvider.otherwise('/');
-        });
+    $urlRouterProvider.otherwise('/');
+});

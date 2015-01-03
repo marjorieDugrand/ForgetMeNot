@@ -6,8 +6,11 @@ and open the template in the editor.
 -->
 <ion-view title="Consult contexts">
     <ion-content class="has-header padding">
-        <a class="item" ng-href="#/contexts/{{context.context_id}}" ng-repeat="context in contexts">
+        <ion-item class="item item-button-right" ng-href="#/contexts/{{context.context_id}}" ng-repeat="context in contexts">
             {{context.name}}
-        </a>
+            <a class="button button-clear button-dark" ng-click="showConfirm({{context}})">
+                <i class="icon ion-trash-a"></i>
+            </a> 
+        </ion-item>
     </ion-content>
 </ion-view>
