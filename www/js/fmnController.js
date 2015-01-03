@@ -56,8 +56,6 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
     $scope.user;
     
     $scope.saveSettings = function () {
-        console.log("Save settings");
-        console.log("selected language : " + $scope.selectedLanguage);
         $scope.user.language_id = $scope.user.language_id.language_id;
         $scope.user.lastModification = Date.now();
         databaseService.updateUserSettings($scope.user).then(function() {
@@ -66,12 +64,12 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
     };
         
     userService.serviceInit().then(function () {
-        getOverdueTasks();
-        getTasksForToday();
         $scope.languages = userService.loadLanguages();
         $scope.user = userService.loadUser();
         $scope.contexts = userService.loadUserContexts();
-        initSelectedLanguage();    
+        initSelectedLanguage(); 
+        getOverdueTasks();
+        getTasksForToday();
     });
 
     var initSelectedLanguage = function () {
@@ -114,7 +112,8 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
         month = getMonthInProperFormat(month);
         day = getDayInProperFormat(day);
         date = year + '-' + month + '-' + day;
-        databaseService.getTasksByCondition("preciseDate", date).then(function (result) {
+        databaseService.getTasksByCondition("preciseDate", date, $scope.user.user_id)
+            .then(function (result) {
             $scope.tasksForToday = result;
             console.log("tasks for today: " + $scope.tasksForToday.length);
             // Sélectionne le message à afficher en fonction du nombre de tâches
@@ -141,7 +140,8 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
         day = getDayInProperFormat(day);
         date = year + '-' + month + '-' + day;
 
-        databaseService.getTasksByCondition("beforeDate", date).then(function (result) {
+        databaseService.getTasksByCondition("beforeDate", date, $scope.user.user_id)
+            .then(function (result) {
             $scope.overdueTasks = result;
             console.log("overdue tasks: " + $scope.overdueTasks.length);
             // Sélectionne le message à afficher en fonction du nombre de tâches
