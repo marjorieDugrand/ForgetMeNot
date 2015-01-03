@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-fmnApp.controller("ContextController", function ($scope, userService, databaseService, $location) {
+fmnApp.controller("ContextController", function ($scope,userService,databaseService,mapService,$location) {
     $scope.contexts = userService.loadUserContexts();
     $scope.context = new Context();
     $scope.location = $location;
@@ -60,7 +60,8 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
         if (userService.loadUser().geolocation) {
             if (navigator.geolocation) {
                 console.log("geolocation supported");
-                navigator.geolocation.getCurrentPosition(function (pos) {
+                mapService.locateUserOnMap($scope.context, "map-canvas");
+                /*navigator.geolocation.getCurrentPosition(function (pos) {
                     $scope.context.location = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                     var mapOptions = {
                         center: $scope.context.location,
@@ -73,7 +74,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
                         map: map,
                         title: 'Your location'
                     });
-                });
+                });*/
             }
             else {
                 $scope.geolocationMessage = "Geolocation is not supported by this browser.";
@@ -89,7 +90,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
 });
 
-    var printMap = function(position) {
+    /*var printMap = function(position, userGeolocation) {
         console.log("printing map");
       var mapOptions = {
         center: position,
@@ -102,16 +103,21 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
          map: map,
          title: 'Your location'
       });
-    };
+      if(userGeolocation) {
+          //geolocate user and add a marker
+          console.log("cool");
+      }
+    };*/
     
-fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService) {
+fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService, userService, mapService) {
     
     $scope.context = null;
     $scope.position;
     
     databaseService.getContext(parseInt($stateParams.contextId)).then(function(result) {
         $scope.context = result;
-        if($scope.hasAddress) {
+        mapService.locateContextOnMap($scope.context, userService.loadUser().geolocation, "map-canvas");
+       /* if($scope.hasAddress) {
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': $scope.context.location}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
@@ -128,7 +134,7 @@ fmnApp.controller("ContextDetailsController", function($scope, $stateParams, dat
         } else {
             $scope.position = $scope.context.location;
             printMap($scope.position);
-        }      
+        }  */    
     });
     
     $scope.hasAddress = function() {
