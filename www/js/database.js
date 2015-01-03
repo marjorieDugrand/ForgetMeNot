@@ -16,7 +16,7 @@ fmnApp.service("databaseService", function ($q) {
         createDB().then(function () {
             if (!doesDBContainsUser('Rajon')) {
                 console.log('adding rajon');
-                addUser(new User('Rajon', 'rajon.rondo@gmail.com', true, 3));
+                addUser(new User('Rajon', 'rajon.rondo@dallas.com', true, 3));
             }
             dbPromise.resolve();
         });
@@ -385,6 +385,24 @@ fmnApp.service("databaseService", function ($q) {
                 console.log("The context has been removed");
             };
         });
+    };
+    
+    
+    this.updateUserSettings = function(user) {
+        var updatePromise = $q.defer();
+        this.getUserByID(user.user_id).then(function(result) {
+           /* result.username = user.username;
+            result.email = user.email;
+            result.geolocation = user.geolocation;
+            result.language_id = user.language_id;
+            result.lastModification = user.lastModification;*/
+            var request = fmnDB.transaction(['users'], 'readwrite').objectStore('users').put(user);
+            request.onsuccess = function () {
+                console.log("The user has been updated.");
+                updatePromise.resolve();
+            };
+        });
+        return updatePromise.promise;
     };
 
     var getContentByKey = function (transactionO, store, key) {

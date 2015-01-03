@@ -4,13 +4,13 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<ion-view title="Settings">      
+<ion-view title="Settings" ng-app="forget-me-not">      
 
     <ion-content class="has-header padding">
 
         <div class="button-bar">
             <a id="save" class="button button-stable icon ion-checkmark-round"
-               onclick="saveSettings()"></a>
+               ng-click="saveSettings()"></a>
             <a id="cancel" class="button button-assertive icon ion-close-round"
                     ng-href="#/"></a>
         </div>
@@ -21,11 +21,17 @@ and open the template in the editor.
                 <input type="text" placeholder="Annabelle"
                        ng-model="user.username">
             </label>
+            
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="text" placeholder="annabelle@gmail.com"
+                       ng-model="user.email">
+            </label>
 
             <div class="item item-toggle">
                 Geolocation
                 <label class="toggle toggle-dark">
-                    <input type="checkbox" ng-checked="{{user.geolocation}}">
+                    <input type="checkbox" ng-model="user.geolocation" ng-checked="{{user.geolocation}}">
                     <div class="track">
                         <div class="handle"></div>
                     </div>
@@ -36,7 +42,7 @@ and open the template in the editor.
                 <div class="input-label">
                     Language
                 </div>
-                <select id="language-select" ng-model="selectedLanguage"
+                <select id="language-select" ng-model="user.language_id"
                         ng-options="language.name for language in languages">
                 </select>
             </label>

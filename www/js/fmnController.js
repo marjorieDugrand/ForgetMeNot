@@ -52,27 +52,38 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
     };
 
     $scope.languages;
+    $scope.selectedLanguage;
     $scope.user;
+    
+    $scope.saveSettings = function () {
+        console.log("Save settings");
+        console.log("selected language : " + $scope.selectedLanguage);
+        $scope.user.language_id = $scope.user.language_id.language_id;
+        $scope.user.lastModification = Date.now();
+        databaseService.updateUserSettings($scope.user).then(function() {
+            console.log("settings saved");
+        });
+    };
+        
     userService.serviceInit().then(function () {
         getOverdueTasks();
         getTasksForToday();
         $scope.languages = userService.loadLanguages();
-        console.log("hey");
         $scope.user = userService.loadUser();
         $scope.contexts = userService.loadUserContexts();
-        $scope.selectedLanguage;
-        $scope.initSelectedLanguages = function () {
+        initSelectedLanguage();    
+    });
+
+    var initSelectedLanguage = function () {
             var i;
             var found = false;
             for (i = 0; i < $scope.languages.length && !found; i++) {
                 if ($scope.languages[i].language_id === $scope.user.language_id) {
-                    $scope.selectedLanguages = $scope.languages[i];
+                    $scope.user.language_id = $scope.languages[i];
                     found = true;
                 }
             }
         };
-    });
-
     $ionicPopover.fromTemplateUrl('templates/notificationsPopover.html', {
         scope: $scope
     }).then(function (popover) {
@@ -180,9 +191,6 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
         }
         return day;
     };
-    
-    $scope.saveSettings = function () {
-        console.log("Save settings");
-    };
+   
 });
 
