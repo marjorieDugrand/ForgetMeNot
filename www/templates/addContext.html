@@ -7,10 +7,10 @@ and open the template in the editor.
 <ion-view title="New context" ng-app="forget-me-not">      
     <ion-content class="has-header padding">
         <div class="button-bar">
-            <button id="save" class="button button-stable icon ion-checkmark-round"
-                    ng-click="saveContext()"></button>
-            <button id="cancel" class="button button-assertive icon ion-close-round"
-                    ng-click="cancelContext()"></button>
+            <a id="save" class="button button-stable icon ion-checkmark-round"
+                    ng-click="saveContext()"></a>
+            <a id="cancel" class="button button-assertive icon ion-close-round"
+               ng-click="cancelContext()" ng-href="#/"></a>
         </div>
 
         <div class="list">

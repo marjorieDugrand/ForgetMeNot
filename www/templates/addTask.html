@@ -47,13 +47,18 @@
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Priority</span>
-                        <input id="priority" type="hidden" ng-model="task.priority"/>
                         <div class="range">
                             <i class="icon ion-ios7-star-outline"></i>
                             <input type="range" name="priority"
                                    min="0" max="3" value="0"
                                    ng-model="task.priority"/>
                             <i class="icon ion-ios7-star"></i>
+                        </div>
+                        <div ng-switch on="task.priority">
+                            <span ng-switch-when="1">Low priority</span>
+                            <span ng-switch-when="2">Medium priority</span>
+                            <span ng-switch-when="3">High priority</span>
+                            <span ng-switch-default>No priority</span>
                         </div>
                     </label>
                     <label class="item item-input">

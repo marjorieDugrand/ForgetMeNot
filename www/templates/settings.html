@@ -10,7 +10,7 @@ and open the template in the editor.
 
         <div class="button-bar">
             <a id="save" class="button button-stable icon ion-checkmark-round"
-               ng-click="saveSettings()"></a>
+               ng-click="saveSettings()" ng-href="#/"></a>
             <a id="cancel" class="button button-assertive icon ion-close-round"
                     ng-href="#/"></a>
         </div>
@@ -18,14 +18,12 @@ and open the template in the editor.
         <div class="list">
             <label class="item item-input">
                 <span class="input-label">Username</span>
-                <input type="text" placeholder="Annabelle"
-                       ng-model="user.username">
+                <input type="text" ng-model="user.username">
             </label>
             
             <label class="item item-input">
                 <span class="input-label">Email</span>
-                <input type="text" placeholder="annabelle@gmail.com"
-                       ng-model="user.email">
+                <input type="text" ng-model="user.email">
             </label>
 
             <div class="item item-toggle">
