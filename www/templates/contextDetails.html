@@ -7,7 +7,7 @@ and open the template in the editor.
 
 <ion-view title="Context Details">      
     <ion-content class="has-header padding">
-        <div class="card">
+        <div class="card" ng-show="showContext">
             <div class="item item-divider">
                 {{context.name}}           
             </div>
@@ -19,6 +19,9 @@ and open the template in the editor.
                 <span class="col col-10">Location</span>                
                 <div class="item" id="map-canvas" style="width:100%;height:380px;"></div> 
             </div>
+        </div>
+        <div class="card" ng-hide="showContext">
+            <span> ERROR - This context is not available </span>
         </div>
     </ion-content>
 </ion-view>

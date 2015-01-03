@@ -81,11 +81,17 @@ fmnApp.controller("AddContextController", function ($scope,userService,databaseS
 fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService, userService, mapService) {
     
     $scope.context = null;
+    $scope.showContext = false;
     $scope.position;
 
-    databaseService.getContext(parseInt($stateParams.contextId)).then(function (result) {
-        $scope.context = result;
-        mapService.locateContextOnMap($scope.context, userService.loadUser().geolocation, "map-canvas");
+    databaseService.getContext(parseInt($stateParams.contextId),
+                               userService.loadUser().user_id)
+        .then(function (result) {
+        if(result !== null) {
+            $scope.showContext = true;
+            $scope.context = result;
+            mapService.locateContextOnMap($scope.context, userService.loadUser().geolocation, "map-canvas");
+        }
     });
 
     $scope.hasAddress = function () {

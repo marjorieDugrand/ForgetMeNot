@@ -95,7 +95,7 @@ fmnApp.service("databaseService", function ($q) {
         var exists = false;
         getContent(['users'], 'users', 'username', username)
                 .then(function (userResult) {
-                    if (userResult.hasOwnProperty("result")) {
+                    if (userResult.result) {
                         exists = true;
                     }
                 });
@@ -164,7 +164,7 @@ fmnApp.service("databaseService", function ($q) {
         return contexts;
     };
 
-    this.getTasksByCondition = function (type, condition) {
+    this.getTasksByCondition = function (type, condition, userId) {
         var recordsPromise = $q.defer();
         var records = [];
         var objectStore = fmnDB.transaction(['tasks'], 'readonly').objectStore('tasks');
@@ -175,53 +175,54 @@ fmnApp.service("databaseService", function ($q) {
 
             if (cursor) {
                 var record = cursor.value;
-                switch (type) {
-                    case "context":
-                        if (record.context_id === condition) {
-                            records.push(record);
-                        }
-                        break;
-                    case "priority":
-                        if (record.priority === condition) {
-                            records.push(record);
-                        }
-                        break;
-                    case "keyword":
-                        if (condition !== "") {
-                            // On cherche dans le champ label et dans le champ nom
-                            if ((record.label.toLowerCase().indexOf(condition.toLowerCase()) !== -1) || (record.name.toLowerCase().indexOf(condition.toLowerCase()) !== -1)) {
+                if(record.owner_id === userId) {
+                    switch (type) {
+                        case "context":
+                            if (record.context_id === condition) {
                                 records.push(record);
                             }
-                        }
-                        break;
-                    case "forDate":
-                        if (condition !== "") {
-                            //var dueDate = new Date(record.dueDate);
+                            break;
+                        case "priority":
+                            if (record.priority === condition) {
+                                records.push(record);
+                            }
+                            break;
+                        case "keyword":
+                            if (condition !== "") {
+                                // On cherche dans le champ label et dans le champ nom
+                                if ((record.label.toLowerCase().indexOf(condition.toLowerCase()) !== -1) || (record.name.toLowerCase().indexOf(condition.toLowerCase()) !== -1)) {
+                                    records.push(record);
+                                }
+                            }
+                            break;
+                        case "forDate":
+                            if (condition !== "") {
+                                //var dueDate = new Date(record.dueDate);
+                                var dueDate = record.dueDate;
+                                if (dueDate !== "" && dueDate <= condition) {
+                                    records.push(record);
+                                }
+                            } else {
+                                if (record.dueDate === "") {
+                                    records.push(record);
+                                }
+                            }
+                            break;
+                        case "preciseDate":
                             var dueDate = record.dueDate;
-                            if (dueDate !== "" && dueDate <= condition) {
+                            if (dueDate !== "" && dueDate === condition) {
                                 records.push(record);
                             }
-                        }
-                        else {
-                            if (record.dueDate === "") {
+                            break;
+                        case "beforeDate":
+                            var dueDate = record.dueDate;
+                            if (dueDate !== "" && dueDate < condition) {
                                 records.push(record);
                             }
-                        }
-                        break;
-                    case "preciseDate":
-                        var dueDate = record.dueDate;
-                        if (dueDate !== "" && dueDate === condition) {
-                            records.push(record);
-                        }
-                        break;
-                    case "beforeDate":
-                        var dueDate = record.dueDate;
-                        if (dueDate !== "" && dueDate < condition) {
-                            records.push(record);
-                        }
-                        break;
-                    default:
-                        console.log("Bad type argument!");
+                            break;
+                        default:
+                            console.log("Bad type argument!");
+                    } 
                 }
                 cursor.continue();
             }
@@ -324,13 +325,18 @@ fmnApp.service("databaseService", function ($q) {
         return keyPromise.promise;
     };  
     
-    this.getTask = function(taskId) {
+    this.getTask = function(taskId, userId) {
         var taskPromise = $q.defer();
         getContentByKey(['tasks'], "tasks", taskId).then(function(result) {
-            taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
-                                         result.context_id, result.duration, result.priority,
-                                         result.label, result.progression, result.dueDate,
-                                         result.lastModification, result.task_id));
+            if(result.owner_id === userId) {
+                taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
+                                             result.context_id, result.duration, result.priority,
+                                             result.label, result.progression, result.dueDate,
+                                             result.lastModification, result.task_id));
+            } else {
+                console.log("user is not owner of the task");
+                taskPromise.resolve(null);
+            }
         });
    
         return taskPromise.promise;
@@ -345,12 +351,17 @@ fmnApp.service("databaseService", function ($q) {
         return userPromise.promise;      
     };
     
-    this.getContext = function(contextId) {
+    this.getContext = function(contextId, userId) {
       var contextPromise=$q.defer();
         getContentByKey(['contexts'], "contexts", contextId).then(function(result) {
-           contextPromise.resolve(new Context(result.name, result.owner_id,
-                                              result.location, result.addressUsed,
-                                              result.context_id, result.lastModification));
+            if(result.owner_id === userId) {
+                contextPromise.resolve(new Context(result.name, result.owner_id,
+                                                   result.location, result.addressUsed,
+                                                   result.context_id, result.lastModification));
+            } else {
+                console.log("user is not the context's owner");
+                contextPromise.resolve(null);
+            }
         });
         
         return contextPromise.promise;   
@@ -391,11 +402,6 @@ fmnApp.service("databaseService", function ($q) {
     this.updateUserSettings = function(user) {
         var updatePromise = $q.defer();
         this.getUserByID(user.user_id).then(function(result) {
-           /* result.username = user.username;
-            result.email = user.email;
-            result.geolocation = user.geolocation;
-            result.language_id = user.language_id;
-            result.lastModification = user.lastModification;*/
             var request = fmnDB.transaction(['users'], 'readwrite').objectStore('users').put(user);
             request.onsuccess = function () {
                 console.log("The user has been updated.");
@@ -410,8 +416,8 @@ fmnApp.service("databaseService", function ($q) {
         var transaction = fmnDB.transaction(transactionO);
         var objectStore = transaction.objectStore(store);
         objectStore.get(key).onsuccess = function(event) {
-          objectPromise.resolve(event.target.result);
-          console.log("ok");
+            var object = event.target.result;
+            objectPromise.resolve(object);
         };
         return objectPromise.promise;
     };

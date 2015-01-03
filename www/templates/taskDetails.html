@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <ion-view title="Task Details" ng-app="forget-me-not">      
     <ion-content class="has-header padding">
-        <div class="card">
+        <div class="card" ng-show="showTask">
             <div class="item item-divider item-icon-left">
                 <div ng-switch on="task.priority">
                     <i ng-switch-when="1" class="icon ion-ios7-star balanced"></i>
@@ -42,6 +42,9 @@ and open the template in the editor.
                 <span class="col col-10">Label</span>
                 {{task.label}}
             </div>    
+        </div>
+        <div class="card" ng-hide="showTask">
+            <span> ERROR - This task is not available </span>
         </div>
     </ion-content>
 </ion-view>
