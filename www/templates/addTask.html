@@ -28,7 +28,7 @@
                         <span class="input-label">Context</span>
                         <select id="context-select"
                                 ng-model="task.context_id" ng-options="context.name for context in contexts">
-                            <option id="default" value="" selected>
+                            <option id="default" value="" ng-if="isContextNotSelected()" selected>
                                 -- choose a context --
                             </option>
                         </select>

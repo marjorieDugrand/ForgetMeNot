@@ -8,10 +8,11 @@ and open the template in the editor.
     <div class="icon ion-ios7-star" ng-class="getPriorityClass({{task.priority}})">
     </div>
     {{task.name}}
+
     <div class="buttons">
-        <button class="button button-clear button-dark" ng-href="#">
+        <a class="button button-clear button-dark" ng-href="#/tasks/{{task.task_id}}/edit">
             <i class="icon ion-edit"></i>
-        </button>
+        </a>
         <a class="button button-clear button-dark" ng-click="showConfirm({{task}})">
             <i class="icon ion-trash-a"></i>
         </a>    
