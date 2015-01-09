@@ -18,10 +18,6 @@ fmnApp.service('userService', function (databaseService, $q) {
              });*/
             databaseService.initDB().then(function () {
                 appLanguages = databaseService.getLanguages();
-                databaseService.getUser('Rajon').then(function (result) {
-                    appUser = result;
-                    servicePromise.resolve();
-                });
             });
         }
         return servicePromise.promise;
@@ -29,6 +25,11 @@ fmnApp.service('userService', function (databaseService, $q) {
     this.loadUser = function () {
         return appUser;
     };
+    
+    this.setUser = function(user) {
+        appUser = user;
+    };
+    
     this.loadLanguages = function () {
         return appLanguages;
     };
@@ -48,7 +49,7 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
     $scope.showOverdueTasks;
 
     $scope.isWelcomePage = function () {
-        return $state.current.name === 'home';
+        return $state.current.name === 'home' || $state.current.name === "authentication";
     };
 
     $scope.languages;
@@ -140,7 +141,7 @@ fmnApp.controller('fmnController', function ($scope, $state, userService, databa
         day = getDayInProperFormat(day);
         date = year + '-' + month + '-' + day;
 
-        databaseService.getTasksByCondition("beforeDate", date, $scope.user.user_id)
+        databaseService.getTasksByCondition("beforeDate", date, $scope.user.serveur_id)
             .then(function (result) {
             $scope.overdueTasks = result;
             console.log("overdue tasks: " + $scope.overdueTasks.length);

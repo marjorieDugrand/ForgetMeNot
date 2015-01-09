@@ -39,15 +39,15 @@ fmnApp.controller("AddContextController", function ($scope,userService,databaseS
         }
         else {
             console.log("Save context");
-            $scope.context.owner_id = userService.loadUser().user_id;
+            $scope.context.owner_id = userService.loadUser().serveur_id;
             $scope.context.addressUsed = $scope.useAddress;
             $scope.context.lastModification = Date.now();
             console.log($scope.context);
             databaseService.storeContext($scope.context).then(function (result) {
                 $scope.context.context_id = result;
+                $scope.context.serveur_id = result;
                 $scope.contextSaved = true;
-                $scope.location.path("/contexts/" + $scope.context.context_id);
-                // setTimeout(function(){}, 2000);
+                $scope.location.path("/contexts/" + $scope.context.serveur_id);
             });
         }
     };
@@ -126,7 +126,7 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
 
     /* Supprime un contexte (de la BD + met à jour l'affichage) */
     var removeContext = function (context) {
-        databaseService.removeContextFromDB(context.context_id);
+        databaseService.removeContextFromDB(context.serveur_id);
         arrayUnset($scope.contexts, context.context_id);
         console.log("length: " + $scope.contexts.length);
     };

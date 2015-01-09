@@ -29,8 +29,13 @@ fmnApp.run(function ($ionicPlatform) {
 
 fmnApp.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-            .state('home', {
+            .state('authentication', {
                 url: '/',
+                templateUrl: 'templates/authentication.html',
+                controller: 'authenticationController'
+            })
+            .state('home', {
+                url: '/home',
                 templateUrl: "templates/home.html",
                 controller: 'fmnController'
             })

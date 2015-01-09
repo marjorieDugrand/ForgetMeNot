@@ -14,10 +14,6 @@ fmnApp.service("databaseService", function ($q) {
     this.initDB = function () {
         var dbPromise = $q.defer();
         createDB().then(function () {
-            if (!doesDBContainsUser('Rajon')) {
-                console.log('adding rajon');
-                addUser(new User('Rajon', 'rajon.rondo@dallas.com', true, 3));
-            }
             dbPromise.resolve();
         });
         return dbPromise.promise;
@@ -39,11 +35,12 @@ fmnApp.service("databaseService", function ($q) {
             fmnDB = evt.currentTarget.result;
             var usersOS = fmnDB.createObjectStore("users",
                     {keyPath: "user_id", autoIncrement: true});
-            usersOS.createIndex("username", "username", {unique: true});
+            usersOS.createIndex("username", "username", {unique: false});
             usersOS.createIndex("email", "email", {unique: true});
             usersOS.createIndex("geolocation", "geolocation", {unique: false});
             usersOS.createIndex("language_id", "language_id", {unique: false});
             usersOS.createIndex("lastModification", "lastModification", {unique: false});
+            usersOS.createIndex("serveur_id", "serveur_id", {unique: true});
 
             var tasksOS = fmnDB.createObjectStore("tasks",
                     {keyPath: "task_id", autoIncrement: true});
@@ -57,6 +54,7 @@ fmnApp.service("databaseService", function ($q) {
             tasksOS.createIndex("progression", "progression", {unique: false});
             tasksOS.createIndex("dueDate", "dueDate", {unique: false});
             tasksOS.createIndex("lastModification", "lastModification", {unique: false});
+            tasksOS.createIndex("serveur_id", "serveur_id", {unique: true});
 
             var contextsOS = fmnDB.createObjectStore("contexts",
                     {keyPath: "context_id", autoIncrement: true});
@@ -65,11 +63,7 @@ fmnApp.service("databaseService", function ($q) {
             contextsOS.createIndex("addressUsed", "addressUsed", {unique: false});
             contextsOS.createIndex("location", "location", {unique: false});
             contextsOS.createIndex("lastModification", "lastModification", {unique: false});
-
-            var dateListsOS = fmnDB.createObjectStore("dateLists",
-                    {keyPath: "list_id", autoIncrement: true});
-            dateListsOS.createIndex("name", "name", {unique: false});
-            dateListsOS.createIndex("owner_id", "owner_id", {unique: false});
+            contextsOS.createIndex("serveur_id", "serveur_id", {unique: true});
 
             var languagesData = [
                 {name: "French", lastModification: Date.now()},
@@ -91,9 +85,9 @@ fmnApp.service("databaseService", function ($q) {
         return dbPromise.promise;
     };
 
-    var doesDBContainsUser = function (username) {
+    var doesDBContainsUser = function (email) {
         var exists = false;
-        getContent(['users'], 'users', 'username', username)
+        getContent(['users'], 'users', 'email', email)
                 .then(function (userResult) {
                     if (userResult.result) {
                         exists = true;
@@ -104,9 +98,11 @@ fmnApp.service("databaseService", function ($q) {
 
     var addUser = function (user) {
         storeContent(["users"], "users", {username: user.username,
-            email: user.email,
-            geolocation: user.geolocation,
-            language_id: user.language_id})
+                                          email: user.email,
+                                          geolocation: user.geolocation,
+                                          language_id: user.language_id,
+                                          lastModification : user.lastModification,
+                                          serveur_id : user.serveur_id})
                 .then(function () {
                     console.log("user " + username + " successfully added");
                 });
@@ -122,7 +118,9 @@ fmnApp.service("databaseService", function ($q) {
                             userResult.result.geolocation,
                             userResult.result.language_id,
                             userResult.result.user_id,
-                            userResult.result.lastModification);
+                            userResult.result.lastModification,
+                            userResult.result.serveur_id);
+                            
                     console.log('user recovered');
                     userPromise.resolve(user);
                 });
@@ -134,7 +132,6 @@ fmnApp.service("databaseService", function ($q) {
         var transaction = fmnDB.transaction(transactionO, 'readonly');
         var store = transaction.objectStore(store);
         var index = store.index(indexName);
-        console.log("jusque là ça va");
         index.get(value).onsuccess = function (evt) {
             contentPromise.resolve(evt.target);
         };
@@ -158,7 +155,8 @@ fmnApp.service("databaseService", function ($q) {
             for (var c = 0; c < result.length; c++) {
                 contexts.push(new Context(result[c].name, result[c].owner_id,
                                           result[c].location, result[c].addressUsed,
-                                          result[c].context_id,result[c].lastModification));
+                                          result[c].context_id,result[c].lastModification,
+                                          result[c].serveur_id));
             }
         });
         return contexts;
@@ -251,8 +249,7 @@ fmnApp.service("databaseService", function ($q) {
             } else {
                 console.log("Cannot recover more records");
                 recordsPromise.resolve(records);
-            }
-            ;
+            };
         };
         return recordsPromise.promise;
     };
@@ -303,7 +300,8 @@ fmnApp.service("databaseService", function ($q) {
             label: task.label,
             progression: task.progression,
             dueDate: task.dueDate,
-            lastModification: task.lastModification})
+            lastModification: task.lastModification,
+            serveur_id : task.serveur_id})
                 .then(function (result) {
                     console.log("task " + task.name + " successfully added");
                     keyPromise.resolve(result);
@@ -317,7 +315,8 @@ fmnApp.service("databaseService", function ($q) {
                                                 owner_id : context.owner_id,
                                                 location : context.location,
                                                 addressUsed : context.addressUsed,
-                                                lastModification : context.lastModification})
+                                                lastModification : context.lastModification,
+                                                serveur_id : context.serveur_id})
                 .then(function(result) {
                     console.log("context " + context.name + " successfully added");
                     keyPromise.resolve(result);
@@ -332,7 +331,7 @@ fmnApp.service("databaseService", function ($q) {
                 taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
                                              result.context_id, result.duration, result.priority,
                                              result.label, result.progression, result.dueDate,
-                                             result.lastModification, result.task_id));
+                                             result.lastModification, result.task_id, result.serveur_id));
             } else {
                 console.log("user is not owner of the task");
                 taskPromise.resolve(null);
@@ -346,7 +345,8 @@ fmnApp.service("databaseService", function ($q) {
         var userPromise = $q.defer();
         getContentByKey(['users'], "users", userId).then(function(result) {
             userPromise.resolve(new User(result.username, result.email, result.geolocation,
-                                         result.language_id, result.user_id, result.lastModification));
+                                         result.language_id, result.user_id,
+                                         result.lastModification, result.serveur_id));
         });
         return userPromise.promise;      
     };
@@ -355,9 +355,9 @@ fmnApp.service("databaseService", function ($q) {
       var contextPromise=$q.defer();
         getContentByKey(['contexts'], "contexts", contextId).then(function(result) {
             if(result.owner_id === userId) {
-                contextPromise.resolve(new Context(result.name, result.owner_id,
-                                                   result.location, result.addressUsed,
-                                                   result.context_id, result.lastModification));
+                contextPromise.resolve(new Context(result.name, result.owner_id, result.location,
+                                                   result.addressUsed, result.context_id,
+                                                   result.lastModification, result.serveur_id));
             } else {
                 console.log("user is not the context's owner");
                 contextPromise.resolve(null);
@@ -431,5 +431,11 @@ fmnApp.service("databaseService", function ($q) {
         };
         return rmPromise.promise;
 
+    };
+    
+    this.addIfNotAlreadyInDatabase = function(user) {
+        if(!doesDBContainsUser(user.email)) {
+            addUser(user);
+        }
     };
 });

@@ -10,12 +10,13 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
         }
         else {
             console.log("Save task");
-            $scope.task.owner_id = userService.loadUser().user_id;
+            $scope.task.owner_id = userService.loadUser().serveur_id;
             $scope.task.lastModification = Date.now();
-            $scope.task.context_id = $scope.task.context_id.context_id;
+            $scope.task.context_id = $scope.task.context_id.serveur_id;
             databaseService.storeTask($scope.task).then(function (result) {
                 $scope.task.task_id = result;
-                $location.path("/tasks/" + $scope.task.task_id);
+                $scope.task.serveur_id = result;
+                $location.path("/tasks/" + $scope.task.serveur_id);
             });
         }
     };
@@ -276,7 +277,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         $scope.show = 7;
 
         console.log("keyword: " + $scope.keyword);
-        databaseService.getTasksByCondition("keyword", $scope.keyword, userService.loadUser().user_id)
+        databaseService.getTasksByCondition("keyword", $scope.keyword, userService.loadUser().serveur_id)
             .then(function (result) {
             $scope.tasks = result;
             console.log("length: " + $scope.tasks.length);
@@ -296,7 +297,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 
         databaseService.getTasksByCondition("context",
                                             $scope.context.selectedContext.context_id,
-                                            userService.loadUser().user_id)
+                                            userService.loadUser().serveur_id)
             .then(function (result) {
             $scope.tasks = result;
             console.log("length: " + $scope.tasks.length);
@@ -316,7 +317,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         console.log("selected priority: " + $scope.priority.selectedPriority.value);
         databaseService.getTasksByCondition("priority",
                                             $scope.priority.selectedPriority.value,
-                                            userService.loadUser().user_id)
+                                            userService.loadUser().serveur_id)
             .then(function (result) {
             console.log(result);
             $scope.tasks = result;
@@ -368,7 +369,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
 
     /* Supprime une tâche (de la BD + met à jour l'affichage) */
     $scope.removeTask = function (task) {
-        databaseService.removeTaskFromDB(task.task_id);
+        databaseService.removeTaskFromDB(task.serveur_id);
         arrayUnset($scope.tasks, task.task_id);
         console.log("length: " + $scope.tasks.length);
         /*console.log("tasks: ");
@@ -426,13 +427,13 @@ fmnApp.controller("TaskDetailsController", function ($scope, $stateParams, datab
         return showTask;
     };
     
-    databaseService.getTask(parseInt($stateParams.taskId), $scope.taskOwner.user_id)
+    databaseService.getTask(parseInt($stateParams.taskId), $scope.taskOwner.serveur_id)
         .then(function (taskResult) {
         if(taskResult !== null) {
             $scope.showTask = true;
             $scope.task = taskResult;       
             if ($scope.task.context_id !== '') {
-                databaseService.getContext($scope.task.context_id, $scope.taskOwner.user_id)
+                databaseService.getContext($scope.task.context_id, $scope.taskOwner.serveur_id)
                 .then(function (contextResult) {
                     $scope.taskContext = contextResult;
                 });
