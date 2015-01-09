@@ -54,16 +54,19 @@ fmnApp.controller("AddTaskController", function ($scope, userService, databaseSe
             $scope.task.priority = level;
         }
     };
-    
-    $scope.isContextNotSelected = function() {
+
+    $scope.isContextNotSelected = function () {
         if ($scope.task.context_id !== "") {
             return false;
         }
-        else 
+        else
             return true;
     };
 });
-fmnApp.controller("TaskListsController", function ($scope, databaseService, $ionicModal, userService, $ionicPopup, $location) {
+
+fmnApp.controller("TaskListsController", function ($scope, databaseService, $ionicModal, userService, $ionicPopup, $timeout
+        ) {
+    $scope.showFooter = false;
     $scope.tasks = [];
     $scope.keyword;
     // Indique la liste qui est actuellement affichée
@@ -366,7 +369,7 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
             }
         });
     };
-    
+
     /* Supprime une tâche (de la BD + met à jour l'affichage) */
     $scope.removeTask = function (task) {
         databaseService.removeTaskFromDB(task.task_id);
@@ -377,6 +380,19 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
          console.log($scope.tasks[i].name);
          }*/
     };
+
+    $scope.finishTask = function (task) {
+        console.log("congratulations, you have finished a task!");
+        databaseService.removeTaskFromDB(task.task_id);
+        arrayUnset($scope.tasks, task.task_id);
+        $scope.showFooter = true;
+        $timeout(hideCongratsFooter, 8000);
+    };
+    
+    var hideCongratsFooter = function() {
+        $scope.showFooter = false;
+    };
+
     /* Supprime un élément donné d'un tableau */
     var arrayUnset = function (array, val) {
         var index = getIndex(array, val);
@@ -410,6 +426,10 @@ fmnApp.controller("TaskListsController", function ($scope, databaseService, $ion
         }
         return day;
     };
+
+    $scope.showCongratsFooter = function () {
+        return $scope.showFooter;
+    }
 });
 fmnApp.controller("TaskDetailsController", function ($scope, $stateParams, databaseService, userService) {
     $scope.task;
