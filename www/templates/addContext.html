@@ -8,7 +8,7 @@ and open the template in the editor.
     <ion-content class="has-header padding">
         <div class="button-bar">
             <a id="save" class="button button-stable icon ion-checkmark-round"
-                    ng-click="saveContext()"></a>
+               ng-click="saveContext()"></a>
             <a id="cancel" class="button button-assertive icon ion-close-round"
                ng-click="cancelContext()" ng-href="#/"></a>
         </div>
@@ -43,7 +43,6 @@ and open the template in the editor.
             <div class="item" ng-show="geolocationUsed()">
                 <div id="map-canvas" style="width:100%;height:380px;">
                 </div>
-                <span>{{getGeolocationMessage()}}</span>
             </div>
         </div>
         <div class="bar bar-footer bar-dark padding" ng-if="showContextFooter()">
@@ -51,4 +50,8 @@ and open the template in the editor.
         </div>
 
     </ion-content>
+
+    <div class="bar bar-footer bar-dark" ng-if="isFooterShown()">
+        <div>{{message}}</div>
+    </div>
 </ion-view>

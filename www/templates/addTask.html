@@ -3,7 +3,6 @@
 
         <section>
             <div id="task-block" ng-app="task">
-
                 <div class="button-bar">
                     <a id="save" class="button icon ion-checkmark-round"
                        ng-click="saveTask()"></a>
@@ -82,4 +81,8 @@
             </div>
         </section>
     </ion-content>
+
+    <div class="bar bar-footer bar-dark" ng-if="isFooterShown()">
+        <div>{{message}}</div>
+    </div>
 </ion-view>

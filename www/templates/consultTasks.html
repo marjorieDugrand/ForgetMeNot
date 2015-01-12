@@ -88,8 +88,8 @@ and open the template in the editor.
         </div>
     </ion-content>
 
-    <div class="bar bar-footer bar-dark" ng-if="showCongratsFooter()">
-        <div>Congratulations, you have one less task to do!</div>
+    <div class="bar bar-footer bar-dark" ng-if="isFooterShown()">
+        <div>{{message}}</div>
     </div>
 </ion-view>   
 
