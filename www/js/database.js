@@ -86,42 +86,30 @@ fmnApp.service("databaseService", function ($q) {
     };
 
     var doesDBContainsUser = function (email) {
-        var exists = false;
+        var checkPromise = $q.defer();
         getContent(['users'], 'users', 'email', email)
                 .then(function (userResult) {
                     if (userResult.result) {
-                        exists = true;
+                        checkPromise.resolve(true);
+                    } else {
+                        checkPromise.resolve(false);
                     }
                 });
-        return exists;
+        return checkPromise.promise;
     };
 
     var addUser = function (user) {
+        var userPromise = $q.defer();
+        console.log("adding user");
         storeContent(["users"], "users", {username: user.username,
                                           email: user.email,
                                           geolocation: user.geolocation,
                                           language_id: user.language_id,
                                           lastModification : user.lastModification,
                                           serveur_id : user.serveur_id})
-                .then(function () {
+                .then(function (result) {
                     console.log("user " + username + " successfully added");
-                });
-    };
-
-    this.getUser = function (username) {
-        var user;
-        var userPromise = $q.defer();
-        getContent(['users'], 'users', 'username', username)
-                .then(function (userResult) {
-                    user = new User(userResult.result.username,
-                            userResult.result.email,
-                            userResult.result.geolocation,
-                            userResult.result.language_id,
-                            userResult.result.user_id,
-                            userResult.result.lastModification,
-                            userResult.result.serveur_id);
-                            
-                    console.log('user recovered');
+                    user.serveur_id = result;
                     userPromise.resolve(user);
                 });
         return userPromise.promise;
@@ -139,14 +127,16 @@ fmnApp.service("databaseService", function ($q) {
     };
 
     this.getLanguages = function () {
+        var languagesPromise = $q.defer();  
         var languages = [];
         getRecords(['languages'], 'languages').then(function (result) {
             for (var l = 0; l < result.length; l++) {
                 languages.push(new Language(result[l].name, result[l].language_id,
                                             result[l].lastModification));
             }
+            languagesPromise.resolve(languages);
         });
-        return languages;
+        return languagesPromise.promise;
     };
 
     this.getUserContexts = function (user_id) {
@@ -284,11 +274,36 @@ fmnApp.service("databaseService", function ($q) {
         var objectStore = transaction.objectStore(store);
         var request = objectStore.add(object);
         request.onsuccess = function (evt) {
-            storePromise.resolve(evt.target.result);
+            var key = evt.target.result;
+            switch(store) {
+                case 'users':
+                   object.user_id = key;
+                   break;
+                case 'tasks':
+                   object.task_id = key;
+                   break;
+                default:
+                   object.context_id = key;
+            } 
+            object.serveur_id = key;
+            updateContent(transactionO,store,object).then(function() {
+               storePromise.resolve(key); 
+            });
         };
         return storePromise.promise;
     };
 
+    var updateContent = function(transactionO, store, content) {
+        var updatePromise = $q.defer();
+        var objectStore = fmnDB.transaction(transactionO, 'readwrite').objectStore(store);
+        var request = objectStore.put(content);
+        request.onsuccess = function () {
+            updatePromise.resolve();
+            console.log("Your content has been updated.");
+        };
+        return updatePromise.promise;
+    };
+    
     this.storeTask = function (task) {
         var keyPromise = $q.defer();
         storeContent(['tasks'], "tasks", {name: task.name,
@@ -349,6 +364,25 @@ fmnApp.service("databaseService", function ($q) {
                                          result.lastModification, result.serveur_id));
         });
         return userPromise.promise;      
+    };
+    
+    var getUser = function (username) {
+        var user;
+        var userPromise = $q.defer();
+        getContent(['users'], 'users', 'username', username)
+                .then(function (userResult) {
+                    user = new User(userResult.result.username,
+                            userResult.result.email,
+                            userResult.result.geolocation,
+                            userResult.result.language_id,
+                            userResult.result.user_id,
+                            userResult.result.lastModification,
+                            userResult.result.serveur_id);
+                            
+                    console.log('user recovered');
+                    userPromise.resolve(user);
+                });
+        return userPromise.promise;
     };
     
     this.getContext = function(contextId, userId) {
@@ -422,6 +456,13 @@ fmnApp.service("databaseService", function ($q) {
         return objectPromise.promise;
     };
 
+    this.getLanguageByID = function(id) {
+        var languagePromise = $q.defer();
+        getContentByKey("languages","languages",id).then(function(result) {
+            languagePromise.resolve(result);
+        });
+        return languagePromise.promise;
+    };
 
     this.rmDB = function () {
         var rmPromise = $q.defer();
@@ -434,8 +475,21 @@ fmnApp.service("databaseService", function ($q) {
     };
     
     this.addIfNotAlreadyInDatabase = function(user) {
-        if(!doesDBContainsUser(user.email)) {
-            addUser(user);
-        }
+        var userPromise = $q.defer();
+        console.log('checking...');
+        doesDBContainsUser(user.email).then(function(exists) {
+            if(!exists) {
+                console.log("user does not exist... adding him");
+                addUser(user).then(function(result) {
+                    userPromise.resolve(result);
+                });
+            } else {
+                console.log("user already in database");
+                getUser(user.username).then(function(result) {
+                    userPromise.resolve(result); 
+                });
+            }
+        });
+        return userPromise.promise;
     };
 });

@@ -46,30 +46,32 @@ fmnApp.service("fbService", function($q) {
             version    : 'v2.2'
         });
         
-        this.checkLoginState();
+        //this.checkLoginState();
     };
     
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
-    function testAPI() {
+    function testAPI(connectionPromise) {
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
             document.getElementById('status').innerHTML =
                 'Thanks for logging in, ' + response.name + '!';
+            connectionPromise.resolve(response);
         });
     }
 });
 
-fmnApp.controller("authenticationController", function($scope, fbService, userService, databaseService) {
+fmnApp.controller("authenticationController", function($scope, $location, fbService, userService, databaseService) {
     fbService.init();
+    $scope.location = $location;
     $scope.choiceToMake = function() {
         return true;
     };
     
     $scope.userResponse;
     
-    fbLogin = function() {
+    var fbLogin = function() {
         fbService.checkLoginState().then(function(response) {
             if(response !== null) {
                 userService.serviceInit().then(function () {
@@ -80,12 +82,18 @@ fmnApp.controller("authenticationController", function($scope, fbService, userSe
                                                    languageId,
                                                    null,
                                                    Date.now());
-                    databaseService.addIfNotAlreadyInDatabase($scope.userResponse);
-                    userService.setUser($scope.userResponse);
+                    databaseService.addIfNotAlreadyInDatabase($scope.userResponse).then(function(result) {
+                        console.log("ouais nouvel utilisateur! : " + result.username + " " +result.serveur_id);
+                        $scope.userResponse = result;
+                        userService.setUser($scope.userResponse);
+                        $scope.location.path("/home");
+                    });
                 });
             }   
         });
     };
+    
+    fbLogin();
     
     function determineUserLanguageId(userLanguage) {
         var appLanguages = userService.loadLanguages();

@@ -17,7 +17,7 @@
 
     <ion-nav-view animation="slide-left-right"></ion-nav-view>
     <header ng-hide="isWelcomePage()" id="user-header" class="bar bar-header bar-energized item-button-left item-button-right">
-        <a class="button button-clear icon-left ion-home" ng-href="#/"></a>
+        <a class="button button-clear icon-left ion-home" ng-href="#/home"></a>
         <img id="logo" ng-src="img/logo_small.jpg" alt="forget-me-not"/>
         <h1 id="username" class="title"> {{user.username}} </h1>
         <div class="buttons">
@@ -43,6 +43,7 @@
     <script src="js/types.js"></script>
     <script src="js/app.js"></script>
     <script src="js/database.js"></script>
+    <script src="js/userService.js"></script>
     <script src="js/authentication.js"></script>
     <script src="js/mapService.js"></script>
     <script src="js/fmnController.js"></script>
