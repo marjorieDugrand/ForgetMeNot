@@ -1,5 +1,6 @@
 {
     "elements": {
+        "ion-nav-title": {},
         "ion-header-bar": {
             "attributes": {
                 "class": {}
@@ -14,8 +15,12 @@
                 "class": {}
             }
         },
+        "ion-nav-back-button": {},
         "ion-nav-bar": {
             "attributes": {
+                "id": {},
+                "ng-hide": {},
+                "class": {},
                 "animation": {}
             }
         },
@@ -31,6 +36,7 @@
                 "id": {},
                 "ng-app": {},
                 "ng-if": {},
+                "ng-switch": {},
                 "class": {}
             }
         },

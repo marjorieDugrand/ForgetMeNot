@@ -73,6 +73,11 @@ fmnApp.config(function ($stateProvider, $urlRouterProvider) {
                 url: '/contexts/:contextId',
                 templateUrl: "templates/contextDetails.html",
                 controller: "ContextDetailsController"
+            })
+            .state('edit_task', {
+                url: '/tasks/:taskId/edit',
+                templateUrl: "templates/addTask.html",
+                controller: "AddTaskController"
             });
     $urlRouterProvider.otherwise('/');
 });

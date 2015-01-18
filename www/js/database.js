@@ -132,7 +132,7 @@ fmnApp.service("databaseService", function ($q) {
         getRecords(['languages'], 'languages').then(function (result) {
             for (var l = 0; l < result.length; l++) {
                 languages.push(new Language(result[l].name, result[l].language_id,
-                                            result[l].lastModification));
+                        result[l].lastModification));
             }
             languagesPromise.resolve(languages);
         });
@@ -163,7 +163,7 @@ fmnApp.service("databaseService", function ($q) {
 
             if (cursor) {
                 var record = cursor.value;
-                if(record.owner_id === userId) {
+                if (record.owner_id === userId) {
                     switch (type) {
                         case "context":
                             if (record.context_id === condition) {
@@ -210,7 +210,7 @@ fmnApp.service("databaseService", function ($q) {
                             break;
                         default:
                             console.log("Bad type argument!");
-                    } 
+                    }
                 }
                 cursor.continue();
             }
@@ -323,8 +323,16 @@ fmnApp.service("databaseService", function ($q) {
                 });
         return keyPromise.promise;
     };
-    
-    this.storeContext = function(context) {
+
+    this.updateTask = function (task) {
+        var objectStore = fmnDB.transaction(['tasks'], 'readwrite').objectStore('tasks');
+        var request = objectStore.put(task);
+        request.onsuccess = function () {
+            console.log("The task has been updated.");
+        };
+    };
+
+    this.storeContext = function (context) {
         var keyPromise = $q.defer();
         storeContent(['contexts'], 'contexts', {name : context.name,
                                                 owner_id : context.owner_id,
@@ -335,14 +343,14 @@ fmnApp.service("databaseService", function ($q) {
                 .then(function(result) {
                     console.log("context " + context.name + " successfully added");
                     keyPromise.resolve(result);
-                }); 
+                });
         return keyPromise.promise;
-    };  
-    
-    this.getTask = function(taskId, userId) {
+    };
+
+    this.getTask = function (taskId, userId) {
         var taskPromise = $q.defer();
-        getContentByKey(['tasks'], "tasks", taskId).then(function(result) {
-            if(result.owner_id === userId) {
+        getContentByKey(['tasks'], "tasks", taskId).then(function (result) {
+            if (result.owner_id === userId) {
                 taskPromise.resolve(new Task(result.name, result.owner_id, result.description,
                                              result.context_id, result.duration, result.priority,
                                              result.label, result.progression, result.dueDate,
@@ -352,24 +360,24 @@ fmnApp.service("databaseService", function ($q) {
                 taskPromise.resolve(null);
             }
         });
-   
+
         return taskPromise.promise;
     };
-    
-    this.getUserByID = function(userId) {
+
+    this.getUserByID = function (userId) {
         var userPromise = $q.defer();
-        getContentByKey(['users'], "users", userId).then(function(result) {
+        getContentByKey(['users'], "users", userId).then(function (result) {
             userPromise.resolve(new User(result.username, result.email, result.geolocation,
                                          result.language_id, result.user_id,
                                          result.lastModification, result.serveur_id));
         });
-        return userPromise.promise;      
+        return userPromise.promise;
     };
     
-    var getUser = function (username) {
+    var getUser = function (email) {
         var user;
         var userPromise = $q.defer();
-        getContent(['users'], 'users', 'username', username)
+        getContent(['users'], 'users', 'email', email)
                 .then(function (userResult) {
                     user = new User(userResult.result.username,
                             userResult.result.email,
@@ -397,10 +405,10 @@ fmnApp.service("databaseService", function ($q) {
                 contextPromise.resolve(null);
             }
         });
-        
-        return contextPromise.promise;   
+
+        return contextPromise.promise;
     };
-    
+
     this.removeTaskFromDB = function (taskId) {
         var objectStore = fmnDB.transaction(['tasks'], 'readwrite').objectStore('tasks');
         // Supprime la tâche de la BDD
@@ -431,11 +439,11 @@ fmnApp.service("databaseService", function ($q) {
             };
         });
     };
-    
-    
-    this.updateUserSettings = function(user) {
+
+
+    this.updateUserSettings = function (user) {
         var updatePromise = $q.defer();
-        this.getUserByID(user.user_id).then(function(result) {
+        this.getUserByID(user.user_id).then(function (result) {
             var request = fmnDB.transaction(['users'], 'readwrite').objectStore('users').put(user);
             request.onsuccess = function () {
                 console.log("The user has been updated.");
@@ -449,7 +457,7 @@ fmnApp.service("databaseService", function ($q) {
         var objectPromise = $q.defer();
         var transaction = fmnDB.transaction(transactionO);
         var objectStore = transaction.objectStore(store);
-        objectStore.get(key).onsuccess = function(event) {
+        objectStore.get(key).onsuccess = function (event) {
             var object = event.target.result;
             objectPromise.resolve(object);
         };
@@ -485,7 +493,7 @@ fmnApp.service("databaseService", function ($q) {
                 });
             } else {
                 console.log("user already in database");
-                getUser(user.username).then(function(result) {
+                getUser(user.email).then(function(result) {
                     userPromise.resolve(result); 
                 });
             }

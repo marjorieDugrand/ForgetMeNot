@@ -3,7 +3,6 @@
 
         <section>
             <div id="task-block" ng-app="task">
-
                 <div class="button-bar">
                     <a id="save" class="button icon ion-checkmark-round"
                        ng-click="saveTask()"></a>
@@ -28,7 +27,7 @@
                         <span class="input-label">Context</span>
                         <select id="context-select"
                                 ng-model="task.context_id" ng-options="context.name for context in contexts">
-                            <option id="default" value="" selected>
+                            <option id="default" value="" ng-if="isContextNotSelected()" selected>
                                 -- choose a context --
                             </option>
                         </select>
@@ -47,7 +46,6 @@
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Priority</span>
-                        <input id="priority" type="hidden" ng-model="task.priority"/>
                         <div class="range">
                             <i class="icon ion-ios7-star-outline"></i>
                             <input type="range" name="priority"
@@ -55,6 +53,23 @@
                                    ng-model="task.priority"/>
                             <i class="icon ion-ios7-star"></i>
                         </div>
+                        <div ng-switch on="task.priority">
+                            <span ng-switch-when="1">Low priority</span>
+                            <span ng-switch-when="2">Medium priority</span>
+                            <span ng-switch-when="3">High priority</span>
+                            <span ng-switch-default>No priority</span>
+                        </div>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Progression</span>
+                        <div class="range">
+                            0%
+                            <input type="range" name="progression"
+                                   min="0" max="100" value="0"
+                                   ng-model="task.progression"/>
+                            100%
+                        </div>
+                        <div class="energized">{{task.progression}}%</div>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Label</span>
@@ -66,4 +81,8 @@
             </div>
         </section>
     </ion-content>
+
+    <div class="bar bar-footer bar-dark" ng-if="isFooterShown()">
+        <div>{{message}}</div>
+    </div>
 </ion-view>

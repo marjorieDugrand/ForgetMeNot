@@ -1,5 +1,7 @@
-fmnApp.controller("AddContextController", function ($scope,userService,databaseService,mapService,$location) {
+fmnApp.controller("AddContextController", function ($scope, $timeout, userService, databaseService, mapService, $location) {
     $scope.contexts = userService.loadUserContexts();
+    $scope.message = "";
+    $scope.showFooter = false;
 
     $scope.context = new Context();
     $scope.location = $location;
@@ -36,6 +38,8 @@ fmnApp.controller("AddContextController", function ($scope,userService,databaseS
         if ($scope.context.name === '' || $scope.context.name === undefined) {
             // A afficher dans un footer ?
             console.log("your context should have a name");
+            $scope.message = "Your context should have a name.";
+            showFooter();
         }
         else {
             console.log("Save context");
@@ -56,8 +60,6 @@ fmnApp.controller("AddContextController", function ($scope,userService,databaseS
         $scope.context = new Context();
     };
 
-    $scope.geolocationMessage = '';
-
     $scope.checkGeolocation = function () {
         if (userService.loadUser().geolocation) {
             if (navigator.geolocation) {
@@ -65,34 +67,44 @@ fmnApp.controller("AddContextController", function ($scope,userService,databaseS
                 mapService.locateUserOnMap($scope.context, "map-canvas");
             }
             else {
-                $scope.geolocationMessage = "Geolocation is not supported by this browser.";
+                $scope.message = "Geolocation is not supported by this browser.";
+                showFooter();
             }
         } else {
-            $scope.geolocationMessage = "Please modify your settings to accept geolocation.";
+            $scope.message = "Please modify your settings to accept geolocation.";
+            showFooter();
         }
     };
 
-    $scope.getGeolocationMessage = function () {
-        return $scope.geolocationMessage;
+    var showFooter = function () {
+        $scope.showFooter = true;
+        $timeout(hideFooter, 8000);
     };
 
+    var hideFooter = function () {
+        $scope.showFooter = false;
+    };
+
+    $scope.isFooterShown = function () {
+        return $scope.showFooter;
+    };
 });
-    
-fmnApp.controller("ContextDetailsController", function($scope, $stateParams, databaseService, userService, mapService) {
-    
+
+fmnApp.controller("ContextDetailsController", function ($scope, $stateParams, databaseService, userService, mapService) {
+
     $scope.context = null;
     $scope.showContext = false;
     $scope.position;
 
     databaseService.getContext(parseInt($stateParams.contextId),
-                               userService.loadUser().user_id)
-        .then(function (result) {
-        if(result !== null) {
-            $scope.showContext = true;
-            $scope.context = result;
-            mapService.locateContextOnMap($scope.context, userService.loadUser().geolocation, "map-canvas");
-        }
-    });
+            userService.loadUser().user_id)
+            .then(function (result) {
+                if (result !== null) {
+                    $scope.showContext = true;
+                    $scope.context = result;
+                    mapService.locateContextOnMap($scope.context, userService.loadUser().geolocation, "map-canvas");
+                }
+            });
 
     $scope.hasAddress = function () {
         if ($scope.context) {
@@ -105,6 +117,8 @@ fmnApp.controller("ContextDetailsController", function($scope, $stateParams, dat
 
 fmnApp.controller("ContextController", function ($scope, userService, databaseService, $ionicPopup) {
     $scope.contexts = userService.loadUserContexts();
+    $scope.message = "";
+    $scope.showFooter = false;
 
     $scope.showConfirm = function (context) {
         var confirmPopup = $ionicPopup.confirm({
@@ -117,6 +131,8 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
             if (res) {
                 console.log('You are sure');
                 removeContext(context);
+                $scope.message = "The context '" + context.name + "' has been deleted.";
+                showFooter();
             }
             else {
                 console.log('You are not sure');
@@ -151,5 +167,18 @@ fmnApp.controller("ContextController", function ($scope, userService, databaseSe
             i++;
         }
         return index;
+    };
+
+    var showFooter = function () {
+        $scope.showFooter = true;
+        $timeout(hideFooter, 8000);
+    };
+
+    var hideFooter = function () {
+        $scope.showFooter = false;
+    };
+
+    $scope.isFooterShown = function () {
+        return $scope.showFooter;
     };
 });

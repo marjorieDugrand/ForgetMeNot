@@ -46,7 +46,7 @@ and open the template in the editor.
             <tasks-list ng-show="isListShown(1)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
-                      ng-click="toggleList(2)" ng-class="{active: isListShown(1)}">
+                      ng-click="toggleList(2)" ng-class="{active: isListShown(2)}">
                 <i class="icon ion-ios7-partlysunny"></i>
                 Tomorrow
             </ion-item>
@@ -66,15 +66,15 @@ and open the template in the editor.
                 <i class="icon ion-ios7-thunderstorm"></i>
                 Within the next 30 days
             </ion-item>
-            
+
             <tasks-list ng-show="isListShown(4)"></tasks-list>
- 
+
             <ion-item class="item item-icon-left item-stable"
                       ng-click="toggleList(5)" ng-class="{active: isListShown(5)}">
                 <i class="icon ion-ios7-moon"></i>
                 Someday
             </ion-item>
-            
+
             <tasks-list ng-show="isListShown(5)"></tasks-list>
 
             <ion-item class="item item-icon-left item-stable"
@@ -87,5 +87,11 @@ and open the template in the editor.
 
         </div>
     </ion-content>
+
+    <div class="bar bar-footer bar-dark" ng-if="isFooterShown()">
+        <div>{{message}}</div>
+    </div>
 </ion-view>   
+
+
 
