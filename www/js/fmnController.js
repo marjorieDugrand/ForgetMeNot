@@ -1,4 +1,5 @@
 fmnApp.controller('fmnController', function ($scope, $location, $state, userService, databaseService, $ionicPopover) {
+    
     $scope.location = $location;
     $scope.tasksForToday = [];
     $scope.overdueTasks = [];
@@ -9,6 +10,12 @@ fmnApp.controller('fmnController', function ($scope, $location, $state, userServ
     $scope.user;
     $scope.contexts;
 
+    $scope.$watch('userService.loadUser()', function() {
+        $scope.user = userService.loadUser();
+        console.log("user : " + $scope.user.username);
+        $scope.$digest();
+    });
+  
     $scope.isWelcomePage = function () {
         return $state.current.name === 'home' || $scope.isAppBeginning();
     };
@@ -164,7 +171,7 @@ fmnApp.controller('fmnController', function ($scope, $location, $state, userServ
         }
     };
     
-    if(!$scope.isAppBeginning()) {
+    if($scope.isAppBeginning() !== true) {
         init();
     }
 });

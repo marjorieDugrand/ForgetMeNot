@@ -374,7 +374,7 @@ fmnApp.service("databaseService", function ($q) {
         return userPromise.promise;
     };
     
-    var getUser = function (email) {
+    this.getUser = function (email) {
         var user;
         var userPromise = $q.defer();
         getContent(['users'], 'users', 'email', email)
@@ -493,7 +493,7 @@ fmnApp.service("databaseService", function ($q) {
                 });
             } else {
                 console.log("user already in database");
-                getUser(user.email).then(function(result) {
+                this.getUser(user.email).then(function(result) {
                     userPromise.resolve(result); 
                 });
             }

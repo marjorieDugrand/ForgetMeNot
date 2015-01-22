@@ -1,5 +1,5 @@
-fmnApp.service('userService', function (databaseService, $q) {
-    var appUser = null;
+fmnApp.service('userService', function (databaseService, $q,$rootScope) {
+    this.appUser = null;
     var appLanguages;
     this.initialized = false;
     this.serviceInit = function () {
@@ -21,11 +21,11 @@ fmnApp.service('userService', function (databaseService, $q) {
         return servicePromise.promise;
     };
     this.loadUser = function () {
-        return appUser;
+        return this.appUser;
     };
     
     this.setUser = function(user) {
-        appUser = user;
+        this.appUser = user;
     };
     
     this.loadLanguages = function () {
@@ -33,8 +33,8 @@ fmnApp.service('userService', function (databaseService, $q) {
     };
 
     this.loadUserContexts = function () {
-        if (appUser !== null) {
-            return databaseService.getUserContexts(appUser.user_id);
+        if (this.appUser !== null) {
+            return databaseService.getUserContexts(this.appUser.user_id);
         }
     };
 

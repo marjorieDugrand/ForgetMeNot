@@ -6,7 +6,12 @@
 
 fmnApp.service("fbService", function($q) {
     
-        
+    var authenticationRequired = false;
+    
+    this.isAuthenticationRequired = function() {
+        return authenticationRequired;
+    };
+    
     function statusChangeCallback(connectionPromise,response) {
         console.log('statusChangeCallback');
         console.log(response);
@@ -15,11 +20,13 @@ fmnApp.service("fbService", function($q) {
           // Logged into your app and Facebook.
           testAPI(connectionPromise);
         } else if (response.status === 'not_authorized') {
+            authenticationRequired = true;
             // The person is logged into Facebook, but not your app.
             document.getElementById('status').innerHTML = 'Please log ' +
             'into this app.';
             connectionPromise.resolve(null);
         } else {
+            authenticationRequired = true;
             // The person is not logged into Facebook, so we're not sure if
             // they are logged into this app or not.
             document.getElementById('status').innerHTML = 'Please log ' +
@@ -63,13 +70,29 @@ fmnApp.service("fbService", function($q) {
 });
 
 fmnApp.controller("authenticationController", function($scope, $location, fbService, userService, databaseService) {
-    fbService.init();
     $scope.location = $location;
-    $scope.choiceToMake = function() {
-        return true;
-    };
+    $scope.authenticationNeeded = fbService.isAuthenticationRequired();
     
     $scope.userResponse;
+    
+    var checkAuthentication = function() {
+        var user = localStorage.getItem("connectedUser");
+        if(user) {
+            console.log("user alreay connected, no need to authenticate");
+            userService.serviceInit().then(function () {
+                databaseService.getUser(user).then(function(result) {
+                    $scope.userResponse = result;
+                    userService.setUser($scope.userResponse);
+                    $scope.location.path("/home");
+                    
+                });
+            });
+        } else {
+            fbService.init();
+            console.log("checking authentication");
+            fbLogin();
+        }
+    };
     
     var fbLogin = function() {
         fbService.checkLoginState().then(function(response) {
@@ -82,6 +105,7 @@ fmnApp.controller("authenticationController", function($scope, $location, fbServ
                                                    languageId,
                                                    null,
                                                    Date.now());
+                    localStorage.setItem("connectedUser", $scope.userResponse.email);
                     databaseService.addIfNotAlreadyInDatabase($scope.userResponse).then(function(result) {
                         console.log("ouais nouvel utilisateur! : " + result.username + " " +result.serveur_id);
                         $scope.userResponse = result;
@@ -93,7 +117,7 @@ fmnApp.controller("authenticationController", function($scope, $location, fbServ
         });
     };
     
-    fbLogin();
+    checkAuthentication();
     
     function determineUserLanguageId(userLanguage) {
         var appLanguages = userService.loadLanguages();
